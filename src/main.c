@@ -23,10 +23,8 @@ int main(int argc, char **argv){
   moves = getMoves('B', board);
   int i = moves[0];
   int c = 1;
-    for (c; c<=i; c+=1){
-   printf("\n");
-  printBoard(moves[c]);
+  for (c; c<=i; c+=1){
+    printf("\n");
+    printBoard(moves[c]);
      }
-  
-  
 }

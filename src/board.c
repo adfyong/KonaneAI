@@ -81,334 +81,460 @@ if (argc == 'B'){
 }
 
 uint64_t *getPieceMoves(int type, int spot, uint64_t board){
-  int toSpot;
-  int spaceSpot;
   uint64_t *moves;
   uint64_t temp;
   int count = 0;
-  uint64_t toggle = 1;
-  if (type ==1) {
-    moves = malloc(3*sizeof(board));
-    toSpot = (board>>(spot-2)) & 1;
-    spaceSpot = (board >>(spot-1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^= toggle<<spot;
-      temp ^=  toggle<<(spot-1);
-      temp ^=  toggle<<(spot-2);
+  switch(type){
+  case 1:
+     moves = malloc(5 *sizeof(board));
+    temp = findRight(spot, board);
+    if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
-    
-     toSpot = (board>>(spot-16)) & 1;
-    spaceSpot = (board >>(spot-8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot-8);
-      temp ^=  toggle<<(spot-16);
-      moves[count] = temp;
-      count +=1;
-  }
-  }
-  if (type ==2) {
-
-    
-    moves = malloc(3*sizeof(board));
-    toSpot = (board>>(spot-2)) & 1;
-    spaceSpot = (board >>(spot-1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot-1);
-      temp ^=  toggle<<(spot-2);
-      moves[count] = temp;
-      count +=1;
-  }
-    
-     toSpot = (board>>(spot+16)) & 1;
-    spaceSpot = (board >>(spot+8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+8);
-      temp ^=  toggle<<(spot+16);
-      moves[count] = temp;
-      count +=1;
-  }
     }
-
-  if (type ==3) {
-    moves = malloc(3*sizeof(board));
-    toSpot = (board>>(spot+2)) & 1;
-    spaceSpot = (board >>(spot+1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+1);
-      temp ^=  toggle<<(spot+2);
+    temp = findDoubleRight(spot, board);
+    if (temp != 0){
       moves[count] = temp;
       count +=1;
-  }
-    
-     toSpot = (board>>(spot-16)) & 1;
-    spaceSpot = (board >>(spot-8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot-8);
-      temp ^=  toggle<<(spot-16);
-      moves[count] = temp;
-      count +=1;
-  }
-   }
-
-  if (type ==4) {
-    moves = malloc(3*sizeof(board));
-    toSpot = (board>>(spot+2)) & 1;
-    spaceSpot = (board >>(spot+1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+1);
-      temp ^=  toggle<<(spot+2);
-      moves[count] = temp;
-      count +=1;
-  }
-    
-     toSpot = (board>>(spot+16)) & 1;
-    spaceSpot = (board >>(spot+8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+8);
-      temp ^=  toggle<<(spot+16);
-      moves[count] = temp;
-      count +=1;
-  }
     }
-  
-  if (type ==5) {
-    moves = malloc(4*sizeof(board));
-    toSpot = (board>>(spot-2)) & 1;
-    spaceSpot = (board >>(spot-1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot-1);
-      temp ^=  toggle<<(spot-2);
+    temp = findDown(spot, board);
+    if (temp != 0){
       moves[count] = temp;
       count +=1;
-  }
-   
-    toSpot = (board>>(spot+2)) & 1;
-    spaceSpot = (board >>(spot+1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+1);
-      temp ^=  toggle<<(spot+2);
+    }
+    temp = findDoubleDown(spot, board);
+    if (temp != 0){
       moves[count] = temp;
       count +=1;
-  }
- 
-     toSpot = (board>>(spot-16)) & 1;
-    spaceSpot = (board >>(spot-8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot-8);
-      temp ^=  toggle<<(spot-16);
+    }
+    moves[count] = 0;
+    return moves;
+    break;
+  case 2:
+    moves = malloc(5 *sizeof(board));
+    temp = findRight(spot, board);
+    if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
-  }
-
-  if (type ==6) {
-    moves = malloc(4*sizeof(board));
-    toSpot = (board>>(spot-2)) & 1;
-    spaceSpot = (board >>(spot-1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot-1);
-      temp ^=  toggle<<(spot-2);
+    }
+    temp = findDoubleRight(spot, board);
+     if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
-   
-    toSpot = (board>>(spot+2)) & 1;
-    spaceSpot = (board >>(spot+1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+1);
-      temp ^=  toggle<<(spot+2);
+    }
+     temp = findUp(spot, board);
+      if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
- 
-     toSpot = (board>>(spot+16)) & 1;
-    spaceSpot = (board >>(spot+8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+8);
-      temp ^=  toggle<<(spot+16);
+    }
+      temp = findDoubleUp(spot, board);
+       if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
-   }
-
-  if (type ==7) {
-    moves = malloc(4*sizeof(board));
-    toSpot = (board>>(spot+16)) & 1;
-    spaceSpot = (board >>(spot+8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+8);
-      temp ^=  toggle<<(spot+16);
+    }
+    moves[count] = 0;
+    return moves;
+    break;
+ case 3:
+    moves = malloc(5 *sizeof(board));
+    temp = findLeft(spot, board);
+    if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
-   
-    toSpot = (board>>(spot-2)) & 1;
-    spaceSpot = (board >>(spot-1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot-1);
-      temp ^=  toggle<<(spot-2);
+    }
+    temp = findDoubleLeft(spot, board);
+     if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
- 
-     toSpot = (board>>(spot-16)) & 1;
-    spaceSpot = (board >>(spot-8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot-8);
-      temp ^=  toggle<<(spot-16);
+    }
+     temp = findDown(spot, board);
+      if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
-   }
-
-  if (type ==8) {
-    moves = malloc(4*sizeof(board));
-    toSpot = (board>>(spot+16)) & 1;
-    spaceSpot = (board >>(spot+8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+8);
-      temp ^=  toggle<<(spot+16);
+    }
+      temp = findDoubleDown(spot, board);
+       if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
-   
-    toSpot = (board>>(spot+2)) & 1;
-    spaceSpot = (board >>(spot+1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+1);
-      temp ^=  toggle<<(spot+2);
+    }
+    moves[count] = 0;
+    return moves;
+    break;
+ case 4:
+    moves = malloc(5 *sizeof(board));
+    temp = findLeft(spot, board);
+    if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
- 
-     toSpot = (board>>(spot-16)) & 1;
-    spaceSpot = (board >>(spot-8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot-8);
-      temp ^=  toggle<<(spot-16);
+    }
+    temp = findDoubleLeft(spot, board);
+     if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
-   }
-  
-  if (type ==9) {
-    moves = malloc(5*sizeof(board));
-    
-    toSpot = (board>>(spot-2)) & 1;
-    spaceSpot = (board >>(spot-1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot-1);
-      temp ^=  toggle<<(spot-2);
+    }
+     temp = findUp(spot, board);
+      if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
-
-    
-
-    toSpot = (board>>(spot+16)) & 1;
-    spaceSpot = (board >>(spot+8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+8);
-      temp ^= toggle<<(spot+16);
+    }
+      temp = findDoubleUp(spot, board);
+       if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
-   
-    toSpot = (board>>(spot+2)) & 1;
-    spaceSpot = (board >>(spot+1)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot+1);
-      temp ^=  toggle<<(spot+2);
+    }
+    moves[count] = 0;
+    return moves;
+    break;
+case 5:
+    moves = malloc(7 *sizeof(board));
+    temp = findRight(spot, board);
+    if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
- 
-     toSpot = (board>>(spot-16)) & 1;
-    spaceSpot = (board >>(spot-8)) & 1;
-    
-    if (toSpot ==0 && spaceSpot ==1){
-      temp = board;
-      temp ^=  toggle<<spot;
-      temp ^=  toggle<<(spot-8);
-      temp ^=  toggle<<(spot-16);
+    }
+    temp = findDoubleRight(spot, board);
+     if (temp != 0){ 
       moves[count] = temp;
       count +=1;
-  }
-   }
-  moves[count] = 0;
-  return moves;
-  
+    }
+      temp = findLeft(spot, board);
+    if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    temp = findDoubleLeft(spot, board);
+     if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+     temp = findDown(spot, board);
+      if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+      temp = findDoubleDown(spot, board);
+       if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    moves[count] = 0;
+    return moves;
+    break;
+ case 6:
+    moves = malloc(7 *sizeof(board));
+    temp = findRight(spot, board);
+    if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    temp = findDoubleRight(spot, board);
+     if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+      temp = findLeft(spot, board);
+    if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    temp = findDoubleLeft(spot, board);
+     if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+     temp = findUp(spot, board);
+      if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+      temp = findDoubleUp(spot, board);
+       if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    moves[count] = 0;
+    return moves;
+    break;
+case 7:
+    moves = malloc(7 *sizeof(board));
+    temp = findRight(spot, board);
+    if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    temp = findDoubleRight(spot, board);
+     if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+      temp = findDown(spot, board);
+    if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    temp = findDoubleDown(spot, board);
+     if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+     temp = findUp(spot, board);
+      if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+      temp = findDoubleUp(spot, board);
+       if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    moves[count] = 0;
+    return moves;
+    break;
+case 8:
+    moves = malloc(7 *sizeof(board));
+    temp = findDown(spot, board);
+    if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    temp = findDoubleDown(spot, board);
+     if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+      temp = findLeft(spot, board);
+    if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    temp = findDoubleLeft(spot, board);
+     if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+     temp = findUp(spot, board);
+      if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+      temp = findDoubleUp(spot, board);
+       if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    moves[count] = 0;
+    return moves;
+    break;
+case 9:
+    moves = malloc(9 *sizeof(board));
+    temp = findRight(spot, board);
+    if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    temp = findDoubleRight(spot, board);
+     if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+      temp = findLeft(spot, board);
+    if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    temp = findDoubleLeft(spot, board);
+     if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+     temp = findUp(spot, board);
+      if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+      temp = findDoubleUp(spot, board);
+      if (temp != 0){ 
+	moves[count] = temp;
+	count +=1;
+      }
+      temp = findDown(spot, board);
+      if (temp != 0){ 
+	moves[count] = temp;
+	count +=1;
+    }
+      temp = findDoubleDown(spot, board);
+       if (temp != 0){ 
+      moves[count] = temp;
+      count +=1;
+    }
+    moves[count] = 0;
+    return moves;
+    break;
+}  
 } 
+uint64_t findRight(int spot, uint64_t board){
+  int toSpot;
+  int spaceSpot;
+  uint64_t toggle= 1;
+  uint64_t temp=0;
+  toSpot = (board>>(spot-2)) & 1;
+  spaceSpot = (board >>(spot-1)) & 1;
+  if (toSpot ==0 && spaceSpot ==1){
+    temp = board;
+    temp ^= toggle<<spot;
+    temp ^=  toggle<<(spot-1);
+    temp ^=  toggle<<(spot-2);
+  }
+  return temp;
+}
+uint64_t findDoubleRight(int spot, uint64_t board){
+  int toSpot;
+  int spaceSpot;
+  int doubleTo;
+  int doubleSpace;
+  int spotCol;
+  int toCol;
+  uint64_t toggle =1;
+  uint64_t temp = 0;
+ 
+  toSpot = (board>>(spot-2)) & 1;
+  spaceSpot = (board >>(spot-1)) & 1;
+  doubleTo = (board >>(spot-4))&1;
+  doubleSpace = (board >>(spot-3))&1;
+  spotCol = spot /8;
+  toCol = (spot -4)/8;
+  if (toSpot ==0 && spaceSpot ==1 && doubleTo ==0 && doubleSpace ==1 && toCol==spotCol && (spot-4)>=0){
+	temp = board;
+	toggle ^= toggle<<spot;
+	temp ^= toggle<<(spot-1);
+	temp ^= toggle<<(spot -3);
+	temp ^= toggle<< (spot-4);
+  }
+  return temp;
+}
+
+ 
+uint64_t findLeft(int spot, uint64_t board){
+   int toSpot;
+  int spaceSpot;
+  uint64_t toggle= 1;
+  uint64_t temp=0;
+  toSpot = (board>>(spot+2)) & 1;
+  spaceSpot = (board >>(spot+1)) & 1;
+  if (toSpot ==0 && spaceSpot ==1){
+    temp = board;
+    temp ^= toggle<<spot;
+    temp ^=  toggle<<(spot+1);
+    temp ^=  toggle<<(spot+2);
+  }
+  return temp;
+ }
+uint64_t findDoubleLeft(int spot, uint64_t board){
+  int toSpot;
+  int spaceSpot;
+  int doubleTo;
+  int doubleSpace;
+  int toCol;
+  int spotCol;
+  uint64_t toggle =1;
+  uint64_t temp = 0;
+  toSpot = (board>>(spot+2)) & 1;
+  spaceSpot = (board >>(spot+1)) & 1;
+  doubleTo = (board >>(spot+4))&1;
+  doubleSpace = (board >>(spot+3))&1;
+  spotCol = spot /8;
+  toCol = (spot+4)/8;
+  if (toSpot ==0 && spaceSpot ==1 && doubleTo ==0 && doubleSpace ==1 && toCol == spotCol && (spot+4)<=63){
+	temp = board;
+	toggle ^= toggle<<spot;
+	temp ^= toggle<<(spot+1);
+	temp ^= toggle<<(spot +3);
+	temp ^= toggle<< (spot+4);
+  }
+  return temp;
+}
+ 
+uint64_t findUp(int spot, uint64_t board){
+    int toSpot;
+  int spaceSpot;
+  uint64_t toggle= 1;
+  uint64_t temp=0;
+  toSpot = (board>>(spot+16)) & 1;
+  spaceSpot = (board >>(spot+8)) & 1;
+  if (toSpot ==0 && spaceSpot ==1){
+    temp = board;
+    temp ^= toggle<<spot;
+    temp ^=  toggle<<(spot+8);
+    temp ^=  toggle<<(spot+16);
+  }
+  return temp;
+
+ }
+uint64_t findDoubleUp(int spot, uint64_t board){
+   int toSpot;
+  int spaceSpot;
+  int doubleTo;
+  int doubleSpace;
+  int toRow;
+  int spotRow;
+  uint64_t toggle =1;
+  uint64_t temp = 0;
+  toSpot = (board>>(spot+16)) & 1;
+  spaceSpot = (board >>(spot+8)) & 1;
+  doubleTo = (board >>(spot+32))&1;
+  doubleSpace = (board >>(spot+24))&1;
+  spotRow = spot % 8;
+  toRow = (spot +32) % 8;
+  if (toSpot ==0 && spaceSpot ==1 && doubleTo ==0 && doubleSpace ==1 && spotRow == toRow && (spot+32)<=63){
+	temp = board;
+	toggle ^= toggle<<spot;
+	temp ^= toggle<<(spot+8);
+	temp ^= toggle<<(spot +24);
+	temp ^= toggle<< (spot+32);
+  }
+  return temp;
+}
+ 
+uint64_t findDown(int spot, uint64_t board){
+   int toSpot;
+  int spaceSpot;
+  uint64_t toggle= 1;
+  uint64_t temp=0;
+  toSpot = (board>>(spot-16)) & 1;
+  spaceSpot = (board >>(spot-8)) & 1;
+  if (toSpot ==0 && spaceSpot ==1){
+    temp = board;
+    temp ^= toggle<<spot;
+    temp ^=  toggle<<(spot-8);
+    temp ^=  toggle<<(spot-16);
+  }
+  return temp;
+}
+uint64_t findDoubleDown(int spot, uint64_t board){
+   int toSpot;
+  int spaceSpot;
+  int doubleTo;
+  int doubleSpace;
+  int toRow;
+  int spotRow;
+  uint64_t toggle =1;
+  uint64_t temp = 0;
+  toSpot = (board>>(spot-16)) & 1;
+  spaceSpot = (board >>(spot-8)) & 1;
+  doubleTo = (board >>(spot-32))&1;
+  doubleSpace = (board >>(spot-24))&1;
+  spotRow = spot % 8;
+  toRow = (spot-32)% 8;
+  if (toSpot ==0 && spaceSpot ==1 && doubleTo ==0 && doubleSpace ==1 && toRow == spotRow && (spot-32)>=0){
+	temp = board;
+	toggle ^= toggle<<spot;
+	temp ^= toggle<<(spot-8);
+	temp ^= toggle<<(spot -24);
+	temp ^= toggle<< (spot-32);
+  }
+  return temp;
+}
+
 
 
 int getType(int argc){

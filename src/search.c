@@ -21,7 +21,8 @@ uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t))
 	// add in iterative deepening search
 	int value = max_value(state, INIT_ALPHA, INIT_BETA, start, eval);
 	
-	for (int i = 0; state->children[i]->value != value; i++);
+	int i;
+	for (i = 0; state->children[i]->value != value; i++);
 
 	return state->children[i]->board;
 }

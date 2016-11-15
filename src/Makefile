@@ -10,3 +10,4 @@ search.o: search.c search.h
 board.o: board.c board.h
 
 Agent: main.c heuristic.o board.o search.o
+	$(CC) $(CFLAGS) -o $@ $^

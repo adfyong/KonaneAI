@@ -11,13 +11,15 @@ struct minimax {
    initializes the alpha-beta pruning algorithm 
    returns the optimal board state for the next move
 */
-uint64_t alpha_beta_search(uint64_t state);
+uint64_t alpha_beta_search(uint64_t state, int(*eval)(uint64_t));
 
 /* recursively gets the value for a max node */
-int max_value(struct minimax *state, int alpha, int beta, int depth);
+int max_value(struct minimax *state, int alpha, int beta,
+	      time_t start, int(*eval)(uint64_t));
 
 /* recursively gets the value for a min node */
-int min_value(struct minimax *state, int alpha, int beta, int depth);
+int min_value(struct minimax *state, int alpha, int beta,
+	      time_t start, int(*eval)(uint64_t));
 
 /* returns the max of a and b */
 int max(int a, int b);

@@ -18,7 +18,7 @@ void printBoard(uint64_t board){
 					printf("B");
 				else
 					printf("W");
-				
+
 			}
 			else{
 				if (col % 2 == 0)
@@ -56,9 +56,9 @@ uint64_t *getMoves(char argc, uint64_t board){
 		moves[0] = count;
 		return moves;
 	}
-	
+
 	if (argc == 'W'){
-		
+
 		for(int i = 0; i<32; i = i +1){
 			spotV = (board>>wSpaces[i]) &1;
 			if (spotV ==1){
@@ -76,8 +76,8 @@ uint64_t *getMoves(char argc, uint64_t board){
 		moves[0] = count;
 		return moves;
 	}
-	
-	
+
+
 }
 
 uint64_t *getPieceMoves(int type, int spot, uint64_t board){
@@ -88,7 +88,7 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 	case 1:
 		moves = malloc(5 *sizeof(board));
 		temp = findRight(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
@@ -113,22 +113,22 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 	case 2:
 		moves = malloc(5 *sizeof(board));
 		temp = findRight(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleRight(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
@@ -138,22 +138,22 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 	case 3:
 		moves = malloc(5 *sizeof(board));
 		temp = findLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDown(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleDown(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
@@ -163,22 +163,22 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 	case 4:
 		moves = malloc(5 *sizeof(board));
 		temp = findLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
@@ -188,32 +188,32 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 	case 5:
 		moves = malloc(7 *sizeof(board));
 		temp = findRight(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleRight(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDown(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleDown(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
@@ -223,32 +223,32 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 	case 6:
 		moves = malloc(7 *sizeof(board));
 		temp = findRight(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleRight(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
@@ -258,32 +258,32 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 	case 7:
 		moves = malloc(7 *sizeof(board));
 		temp = findRight(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleRight(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDown(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleDown(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
@@ -293,32 +293,32 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 	case 8:
 		moves = malloc(7 *sizeof(board));
 		temp = findDown(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleDown(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
@@ -328,50 +328,50 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 	case 9:
 		moves = malloc(9 *sizeof(board));
 		temp = findRight(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleRight(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleLeft(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleUp(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDown(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		temp = findDoubleDown(spot, board);
-		if (temp != 0){ 
+		if (temp != 0){
 			moves[count] = temp;
 			count +=1;
 		}
 		moves[count] = 0;
 		return moves;
 		break;
-	}  
-} 
+	}
+}
 uint64_t findRight(int spot, uint64_t board){
 	int toSpot;
 	int spaceSpot;
@@ -396,7 +396,7 @@ uint64_t findDoubleRight(int spot, uint64_t board){
 	int toCol;
 	uint64_t toggle =1;
 	uint64_t temp = 0;
-	
+
 	toSpot = (board>>(spot-2)) & 1;
 	spaceSpot = (board >>(spot-1)) & 1;
 	doubleTo = (board >>(spot-4))&1;
@@ -468,7 +468,7 @@ uint64_t findUp(int spot, uint64_t board){
 		temp ^=  toggle<<(spot+16);
 	}
 	return temp;
-	
+
 }
 uint64_t findDoubleUp(int spot, uint64_t board){
 	int toSpot;
@@ -543,30 +543,30 @@ int getType(int argc){
 	int type = 0;
 	if (row <=7 && row >=6 && col <=7 && col >=6)
 		type = 1;
-	
+
 	if (row <=1 && row >=0 && col <=7 && col >=6)
 		type = 2;
-	
+
 	if (row <=7 && row >=6 && col <=1 && col >=0)
 		type = 3;
-	
+
 	if (row <=1 && row >=0 && col <=1 && col >=0)
 		type = 4;
-	
+
 	if (row <=7 && row >=6 && col <=5 && col >=2)
 		type = 5;
-	
+
 	if (row <=1 && row >=0 && col <=5 && col >=2)
 		type = 6;
-	
+
 	if (row <=5 && row >=2 && col <=7 && col >=6)
 		type = 7;
-	
+
 	if (row <=5 && row >=2 && col <= 1 && col >=0)
 		type = 8;
-	
+
 	if (row <=5 && row >=2 && col <=5 && col >=2)
 		type = 9;
-	
+
 	return type;
 }

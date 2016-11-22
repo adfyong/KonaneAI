@@ -9,42 +9,48 @@
 #define THINKING_TIME  10
 #define INIT_ALPHA    -65
 #define INIT_BETA      65
+#define DONE printf("done\n")
 
-uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t))
+uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t), int me)
 {
-	struct minimax *state = NULL;
+	struct minimax *state;
+	state = malloc(sizeof(struct minimax));
 	state->board = board;
 	state->value = INIT_ALPHA;
-
-	time_t start = time(NULL);
-
-	// add in iterative deepening search
-	int value = max_value(state, INIT_ALPHA, INIT_BETA, start, eval);
 	
-	int i;
-	for (i = 0; state->children[i]->value != value; i++);
+	time_t start = time(NULL);
+	int value;
+	for (int depth = 1; time(NULL) < (start + THINKING_TIME); depth++)
+		value = max_value(state, INIT_ALPHA, INIT_BETA, 1, 2, eval, me);
 
-	return state->children[i]->board;
+	int i;
+	for (i = 0; state->children[i].value != value; i++);
+
+	return state->children[i].board;
 }
 
 int max_value(struct minimax *state, int alpha, int beta,
-	      time_t start, int(*eval)(uint64_t))
+	      int depth, int max_depth, int(*eval)(uint64_t), int me)
 {
-	if (time(NULL) > (start+10))
-		return eval(state->board);
+	if (depth >= max_depth) {
+		uint64_t board = state->board;
+		//free(state);
+		return eval(board);
+	}
 	
 	int v = INIT_ALPHA;
-	// assumes max is black --> change later
-	uint64_t *moves = getMoves('B', state->board);
-	state->children = calloc(moves[0] - 1, sizeof(struct minimax));
-	
+	uint64_t *moves = getMoves(me, state->board);
+	me ^= 1;
+	state->children = malloc(moves[0] * sizeof(struct minimax));
+
 	if (moves[0] == 0)
 		return eval(state->board);
-	
+
 	for (int i = 1; i <= moves[0]; i++) {
-		state->children[i-1]->board = moves[i];
-		v = max(v, min_value(state->children[i],
-				     alpha, beta, start, eval));
+		state->children[i-1].board = moves[i];
+	       
+		v = max(v, min_value(&(state->children[i-1]),
+				     alpha, beta, depth++, max_depth, eval, me));
 		
 		state->value = v;
 		if (v >= alpha)
@@ -55,23 +61,28 @@ int max_value(struct minimax *state, int alpha, int beta,
 }
 
 int min_value(struct minimax *state, int alpha, int beta,
-	      time_t start, int(*eval)(uint64_t))
+	      int depth, int max_depth, int(*eval)(uint64_t), int me)
 {
-	if (time(NULL) > (start+10))
-		return eval(state->board);
-	
+	if (depth >= max_depth) {
+		uint64_t board = state->board;
+		//free(state);
+		return eval(board);
+	}
+       
 	int v = INIT_BETA;
-	// assumes min is white --> change later
-	uint64_t *moves = getMoves('W', state->board);
-	state->children = calloc(moves[0] - 1, sizeof(struct minimax));
-	
+
+	uint64_t *moves = getMoves(me, state->board);
+	me ^= 1;
+	state->children = malloc(moves[0] * sizeof(struct minimax));
+
 	if (moves[0] == 0)
 		return eval(state->board);
 	
 	for (int i = 1; i <= moves[0]; i++) {
-		state->children[i-1]->board = moves[i];
-		v = min(v, max_value(state->children[i],
-				     alpha, beta, start, eval));
+		
+		state->children[i-1].board = moves[i];
+		v = min(v, max_value(&(state->children[i-1]),
+				     alpha, beta, depth++, max_depth, eval, me));
 
 		state->value = v;
 		if (v <= alpha)

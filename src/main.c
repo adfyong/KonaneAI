@@ -20,7 +20,7 @@ int main(int argc, char **argv){
   };
   printBoard(board);
   printf("\n \n");
-  moves = getMoves('B', board);
+  moves = getMoves(1, board);
   int i = moves[0];
   int c = 1;
   for (c; c<=i; c+=1){

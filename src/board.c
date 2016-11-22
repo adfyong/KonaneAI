@@ -8,28 +8,29 @@ void printBoard(uint64_t board){
 	for (count = 63; count >=0; count-=1){
 		spotV = (board >>count) &1;
 		if (spotV == 0){
-			printf("O");
+			printf("O ");
 		}
 		else{
 			int row = count /8;
 			int col = count % 8;
 			if (row %2 == 0){
 				if (col % 2 == 0)
-					printf("B");
+					printf("B ");
 				else
-					printf("W");
+					printf("W ");
 
 			}
 			else{
 				if (col % 2 == 0)
-					printf("W");
+					printf("W ");
 				else
-					printf("B");
+					printf("B ");
 			}
 		}
 		if (count % 8 == 0)
 			printf("\n");
-	}}
+	}
+}
 
 uint64_t *getMoves(int argc, uint64_t board){
 	int bSpaces[33]= {0, 2, 4, 6, 9, 11, 13, 15, 16, 18, 20, 22, 25, 27, 29, 31, 32, 34, 36, 38, 41, 43, 45, 47, 48, 50, 52, 54, 57, 59, 61, 63};
@@ -77,7 +78,7 @@ uint64_t *getMoves(int argc, uint64_t board){
 		return moves;
 	}
 
-
+	return NULL;
 }
 
 uint64_t *getPieceMoves(int type, int spot, uint64_t board){
@@ -371,6 +372,7 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 		return moves;
 		break;
 	}
+	return NULL;
 }
 uint64_t findRight(int spot, uint64_t board){
 	int toSpot;

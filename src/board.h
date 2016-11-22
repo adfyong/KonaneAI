@@ -5,7 +5,7 @@
 
 void printBoard(uint64_t board);
 int getType(int argc);
-uint64_t *getMoves(char argc, uint64_t board);
+uint64_t *getMoves(int argc, uint64_t board);
 uint64_t *getPieceMoves(int type, int spot, uint64_t board);
 
 uint64_t findRight(int spot, uint64_t board);

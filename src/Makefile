@@ -1,4 +1,5 @@
-CFLAGS= -std=c99 -Wall -pedantic -g
+SHELL=gcc
+CFLAGS= -std=c99 -Wall -pedantic -g -DDEBUG
 CC=gcc
 
 .PHONY: clean
@@ -11,3 +12,6 @@ board.o: board.c board.h
 
 Agent: main.c heuristic.o board.o search.o
 	$(CC) $(CFLAGS) -o $@ $^
+
+clean:
+	$(RM) *.o Agent

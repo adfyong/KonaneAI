@@ -12,7 +12,7 @@
 
 uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t))
 {
-	struct minimax *state = NULL
+	struct minimax *state = NULL;
 	state->board = board;
 	state->value = INIT_ALPHA;
 
@@ -20,8 +20,8 @@ uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t))
 
 	// add in iterative deepening search
 	int value = max_value(state, INIT_ALPHA, INIT_BETA, start, eval);
-	
-	for (int i = 0; state->children[i]->value != value; i++);
+	int i;
+	for (i = 0; state->children[i]->value != value; i++);
 
 	return state->children[i]->board;
 }
@@ -41,7 +41,7 @@ int max_value(struct minimax *state, int alpha, int beta,
 		return eval(state->board);
 	
 	for (int i = 1; i <= moves[0]; i++) {
-		state->children[i]->board = moves[i];
+		state->children[i-1]->board = moves[i];
 		v = max(v, min_value(state->children[i],
 				     alpha, beta, start, eval));
 		
@@ -68,7 +68,7 @@ int min_value(struct minimax *state, int alpha, int beta,
 		return eval(state->board);
 	
 	for (int i = 1; i <= moves[0]; i++) {
-		state->children[i]->board = moves[i];
+		state->children[i-1]->board = moves[i];
 		v = min(v, max_value(state->children[i],
 				     alpha, beta, start, eval));
 

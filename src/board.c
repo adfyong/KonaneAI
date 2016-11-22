@@ -31,14 +31,14 @@ void printBoard(uint64_t board){
 			printf("\n");
 	}}
 
-uint64_t *getMoves(char argc, uint64_t board){
+uint64_t *getMoves(int argc, uint64_t board){
 	int bSpaces[33]= {0, 2, 4, 6, 9, 11, 13, 15, 16, 18, 20, 22, 25, 27, 29, 31, 32, 34, 36, 38, 41, 43, 45, 47, 48, 50, 52, 54, 57, 59, 61, 63};
 	int wSpaces[33] = {1, 3, 5, 7, 8, 10, 12, 14, 17, 19, 21, 23, 24, 26, 28, 30, 31, 33, 35, 37, 39, 40, 42, 44, 46, 49, 51, 53, 55, 56, 58, 60, 62};
 	int type;
 	int count=0;
 	uint64_t spotV = 0;
 	uint64_t *moves = malloc(20 *sizeof(board));
-	if (argc == 'B'){
+	if (argc == 1){
 		for(int i = 0; i<32; i = i +1){
 			spotV = (board>>bSpaces[i]) &1;
 			if (spotV ==1){
@@ -57,7 +57,7 @@ uint64_t *getMoves(char argc, uint64_t board){
 		return moves;
 	}
 
-	if (argc == 'W'){
+	if (argc == 0){
 
 		for(int i = 0; i<32; i = i +1){
 			spotV = (board>>wSpaces[i]) &1;

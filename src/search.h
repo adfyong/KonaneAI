@@ -1,8 +1,9 @@
 #include <stdbool.h>
 #include <stdint.h>
+#include <time.h>
 
 struct minimax {
-	struct minimax **children;
+	struct minimax *children;
 	uint64_t board;
 	int value;
 };
@@ -11,15 +12,15 @@ struct minimax {
    initializes the alpha-beta pruning algorithm 
    returns the optimal board state for the next move
 */
-uint64_t alpha_beta_search(uint64_t state, int(*eval)(uint64_t));
+uint64_t alpha_beta_search(uint64_t state, int(*eval)(uint64_t), int me);
 
 /* recursively gets the value for a max node */
 int max_value(struct minimax *state, int alpha, int beta,
-	      time_t start, int(*eval)(uint64_t));
+	      int depth, int max_depth, int(*eval)(uint64_t), int me);
 
 /* recursively gets the value for a min node */
 int min_value(struct minimax *state, int alpha, int beta,
-	      time_t start, int(*eval)(uint64_t));
+	      int depth, int max_depth, int(*eval)(uint64_t), int me);
 
 /* returns the max of a and b */
 int max(int a, int b);

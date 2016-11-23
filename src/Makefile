@@ -1,5 +1,4 @@
-SHELL=/bin/bash
-CFLAGS= -std=c99 -Wall -pedantic -g -DDEBUG
+CFLAGS= -std=c99 -Wall -pedantic -g
 CC=gcc
 
 .PHONY: clean

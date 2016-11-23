@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdio.h>
+#include <inttypes.h>
 
 #define IS_BLACK(i) ((((i/8) % 2) && (i % 2)) || (!((i/8) % 2) && !(i % 2)))
 
@@ -7,6 +8,10 @@ int count_movable(uint64_t board) {
 	int w_movable = 0;
 	int b_movable = 0;
 	uint64_t o = 1; // a 64-bit version of 1 so we can shift it
+#ifdef DEBUG
+	fprintf(stderr, "Heuristic analyzing ");
+	printf("%" PRIx64 "\n", board);
+#endif
 	for (int i = 0; i < 64; ++i) {
 		if (!(board & (1 << i)))
 			// bit is unset

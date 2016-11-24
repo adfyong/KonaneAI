@@ -3,7 +3,7 @@
 #include <time.h>
 
 struct minimax {
-	struct minimax *children;
+	struct minimax **children;
 	uint64_t board;
 	int value;
 };

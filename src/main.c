@@ -18,8 +18,8 @@ int main(int argc, char **argv){
 		if (f == 'B' || f == 'W' || f == 'O')
 			board = board << 1;
 	};
-	if (argv[2][0] == 'B'){     
-		board = makeInitialMove(board, 28, 'W');
+	if (argv[2][0] == 'W'){     
+		board = makeInitialMove(board, 27, 'B');
 		char fletter;
 		int fnumb;
 		char tletter;
@@ -27,7 +27,7 @@ int main(int argc, char **argv){
 		uint64_t temp =0;
 		printBoard(board);
 		while(temp ==0){
-			printf("Enter your desired initial move(e4, d5): ");
+			printf("Enter your desired initial move(d4, e5): ");
 			scanf(" %c %d", &fletter, &fnumb);
 			temp = makeInitialMove(board, findValue(fletter, fnumb), argv[2][0]);
 		}
@@ -42,11 +42,7 @@ int main(int argc, char **argv){
 			while(temp ==0){
 				printf("Enter your desired  move(from to): ");
 				scanf(" %c %d %c %d", &fletter, &fnumb, &tletter, &tnumb);
-				//printf("%c %d %c %d\n", fletter, fnumb, tletter, tnumb);
 				
-				//int from = findValue(fletter, fnumb);
-				//int to = findValue(tletter, tnumb);
-				//printf("%d %d\n", from, to);
 				temp = makeMove(board, findValue(fletter, fnumb), findValue(tletter, tnumb), argv[2][0]);
 				
 				printf("\n\n");
@@ -57,7 +53,7 @@ int main(int argc, char **argv){
 		}
 	
 	}
-	else if(argv[2][0] == 'W'){
+	else if(argv[2][0] == 'B'){
 		char fletter;
 		int fnumb;
 		char tletter;
@@ -65,13 +61,13 @@ int main(int argc, char **argv){
 		uint64_t temp =0;
 		while(temp ==0){
 			printBoard(board);
-			printf("Enter your desired initial move(d4, e5): ");
+			printf("Enter your desired initial move(d5, e4): ");
 			scanf(" %c %d", &fletter, &fnumb);
 			temp = makeInitialMove(board, findValue(fletter, fnumb), argv[2][0]);
 		}
 		board = temp;
 		printBoard(board);
-		board = makeInitialMove(board, 27, 'B');
+		board = makeInitialMove(board, 28, 'W');
 		printBoard(board);
 		temp =0;
 		int i;
@@ -79,11 +75,7 @@ int main(int argc, char **argv){
 			while(temp ==0){
 				printf("Enter your desired  move(from to): ");
 				scanf(" %c %d %c %d", &fletter, &fnumb, &tletter, &tnumb);
-				//printf("%c %d %c %d\n", fletter, fnumb, tletter, tnumb);
-				
-				//int from = findValue(fletter, fnumb);
-				//int to = findValue(tletter, tnumb);
-				//printf("%d %d\n", from, to);
+			       
 				temp = makeMove(board, findValue(fletter, fnumb), findValue(tletter, tnumb), argv[2][0]);
 				
 				printf("\n\n");

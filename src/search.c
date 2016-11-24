@@ -39,13 +39,15 @@ int max_value(struct minimax *state, int alpha, int beta,
 	}
 	
 	int v = INIT_ALPHA;
-	uint64_t *moves = getMoves(me, state->board);
+	uint64_t *moves = malloc(20*sizeof(state->board));
+	getMoves(me, state->board, moves);
 	me ^= 1;
 	state->children = malloc(moves[0] * sizeof(struct minimax));
 
-	if (moves[0] == 0)
+	if (moves[0] == 0){
+		free(moves);
 		return eval(state->board);
-
+	}
 	for (int i = 1; i <= moves[0]; i++) {
 		state->children[i-1].board = moves[i];
 	       
@@ -53,10 +55,12 @@ int max_value(struct minimax *state, int alpha, int beta,
 				     alpha, beta, depth++, max_depth, eval, me));
 		
 		state->value = v;
-		if (v >= alpha)
-			return v;
+		if (v >= alpha){
+			free(moves);
+			return v;}
 		beta = max(beta, v);
 	}
+	free(moves);
 	return v;
 }
 
@@ -71,13 +75,15 @@ int min_value(struct minimax *state, int alpha, int beta,
        
 	int v = INIT_BETA;
 
-	uint64_t *moves = getMoves(me, state->board);
+	uint64_t *moves =malloc(20*sizeof(state->board));
+	getMoves(me, state->board, moves);
 	me ^= 1;
 	state->children = malloc(moves[0] * sizeof(struct minimax));
 
-	if (moves[0] == 0)
+	if (moves[0] == 0){
+		free(moves);
 		return eval(state->board);
-	
+	}
 	for (int i = 1; i <= moves[0]; i++) {
 		
 		state->children[i-1].board = moves[i];
@@ -85,10 +91,12 @@ int min_value(struct minimax *state, int alpha, int beta,
 				     alpha, beta, depth++, max_depth, eval, me));
 
 		state->value = v;
-		if (v <= alpha)
-			return v;
+		if (v <= alpha){
+			free(moves);
+			return v;}
 		beta = min(beta, v);
 	}
+	free(moves);
 	return v;
 	
 }

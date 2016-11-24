@@ -36,7 +36,7 @@ int main(int argc, char **argv){
 		temp =0;
 		int i;
 		for(i = 0; i<10; i++){
-			board = alpha_beta_search(board, count_movable, 0);
+			board = alpha_beta_search(board, count_movable, 1);
 			printBoard(board);
 			
 			while(temp ==0){
@@ -83,7 +83,7 @@ int main(int argc, char **argv){
 			board = temp;
 			temp =0;
 			printBoard(board);
-			board = alpha_beta_search(board, count_movable, 1);
+			board = alpha_beta_search(board, count_movable, 0);
 			printBoard(board);
 		}
 	}

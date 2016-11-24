@@ -5,6 +5,8 @@
 void printBoard(uint64_t board){
 	uint64_t spotV;
 	int count;
+	int numbers = 8;
+	printf("%d ", numbers);
 	for (count = 63; count >=0; count-=1){
 		spotV = (board >>count) &1;
 		if (spotV == 0){
@@ -27,67 +29,152 @@ void printBoard(uint64_t board){
 					printf("B ");
 			}
 		}
-		if (count % 8 == 0)
+		if (count % 8 == 0){
 			printf("\n");
+			numbers -=1;
+			if (numbers !=0)
+			printf("%d ", numbers);
+		}
 	}
+	printf("  a b c d e f g h\n\n");
+}
+//bool gameOver(uint64_t board, int argc){
+//	return true;
+//}
+int findValue(char argc, int argv){
+	int value;
+	//	printf("%i\n", argc);
+	value = (7-((int)argc-97))+((argv-1)*8);
+	//printf("%d \n", value);
+	return value;
+
 }
 
-uint64_t *getMoves(int argc, uint64_t board){
+char findColor(int argc){
+	char color;
+	int row = argc /8;
+	int col = argc % 8;
+	if (row %2 == 0){
+		if (col % 2 == 0)
+			color = 'B';
+		else
+			color = 'W';
+		
+	}
+	else{
+		if (col % 2 == 0)
+			color = 'W';
+		else
+			color = 'B';
+	}
+	return color;
+}
+
+uint64_t makeMove(uint64_t board, int argc, int argv, char argv1){
+	uint64_t temp = 0;
+	uint64_t toggle = 1;
+	int diff = argv - argc;
+	int frow = argc /8;
+	int fcol = argc % 8;
+	int trow = argv /8;
+	int tcol = argv %8;
+	int spotV;
+	if(findColor(argc) == argv1 && findColor(argv)== argv1 && argc >=0 && argc<=63 && argv >=0 && argv <=63){
+		switch(diff){
+		case 16:
+			if(tcol == fcol){
+				spotV = (board >>(argc+8)) & 1;
+				if(spotV ==1){
+					temp = board;
+					temp ^= toggle<<argc;
+					temp ^=  toggle<<(argc+8);
+					temp ^=  toggle<<argv;
+					return temp;
+					break;
+				}
+			}
+		case -16:
+			if(tcol == fcol){
+				spotV = (board >>(argc-8)) & 1;
+				if(spotV ==1){
+					temp = board;
+					temp ^= toggle<<argc;
+					temp ^=  toggle<<(argc-8);
+					temp ^=  toggle<<argv;
+					return temp;
+					break;
+				}
+			}
+		case 2:
+			if(trow == frow){
+				spotV = (board >>(argc +1)) & 1;
+				if(spotV ==1){
+					temp = board;
+					temp ^= toggle<<argc;
+					temp ^=  toggle<<(argc+1);
+					temp ^=  toggle<<argv;
+					return temp;
+					break;
+				}
+			}
+		case -2:
+			if(trow == frow){
+				spotV = (board >>(argc-1)) & 1;
+				if(spotV ==1){
+					temp = board;
+					temp ^= toggle<<argc;
+					temp ^=  toggle<<(argc-1);
+					temp ^=  toggle<<argv;
+					return temp;
+					break;
+				}
+			}
+			
+		}
+	}
+	return temp;
+}
+uint64_t makeInitialMove(uint64_t board, int argc, char argv){
+	uint64_t temp =0;
+	uint64_t toggle =1;
+	if(argv == findColor(argc)){
+		temp =board;
+		temp ^= toggle<<argc;
+		return temp;
+	}
+	return temp;
+}
+void getMoves(int argc, uint64_t board, uint64_t *moves){
 	int bSpaces[33]= {0, 2, 4, 6, 9, 11, 13, 15, 16, 18, 20, 22, 25, 27, 29, 31, 32, 34, 36, 38, 41, 43, 45, 47, 48, 50, 52, 54, 57, 59, 61, 63};
 	int wSpaces[33] = {1, 3, 5, 7, 8, 10, 12, 14, 17, 19, 21, 23, 24, 26, 28, 30, 31, 33, 35, 37, 39, 40, 42, 44, 46, 49, 51, 53, 55, 56, 58, 60, 62};
 	int type;
-	int count=0;
 	uint64_t spotV = 0;
-	uint64_t *moves = malloc(20 *sizeof(board));
+	moves[0]=0;
 	if (argc == 1){
 		for(int i = 0; i<32; i = i +1){
 			spotV = (board>>bSpaces[i]) &1;
 			if (spotV ==1){
 				type = getType(bSpaces[i]);
-				uint64_t *pieceMoves = getPieceMoves(type, bSpaces[i], board);
-				int counter = 0;
-				uint64_t temp = pieceMoves[counter];
-				while (temp != 0){
-					count +=1;
-					moves[count] = temp;
-					counter +=1;
-					temp = pieceMoves[counter];}
-			}
-		}
-		moves[0] = count;
-		return moves;
+				getPieceMoves(type, bSpaces[i], board, moves);
+			}}
+	       
 	}
 
 	if (argc == 0){
-
-		for(int i = 0; i<32; i = i +1){
-			spotV = (board>>wSpaces[i]) &1;
+		for(int i = 0; i<32; i=i+1){
+	       	spotV = (board>>wSpaces[i]) &1;
 			if (spotV ==1){
 				type = getType(wSpaces[i]);
-				uint64_t *pieceMoves = getPieceMoves(type, wSpaces[i], board);
-				int counter = 0;
-				uint64_t temp = pieceMoves[counter];
-				while (temp != 0){
-					count +=1;
-					moves[count] = temp;
-					counter +=1;
-					temp = pieceMoves[counter];}
-			}
+				getPieceMoves(type, wSpaces[i], board, moves);
+			}}
 		}
-		moves[0] = count;
-		return moves;
-	}
-
-	return NULL;
 }
 
-uint64_t *getPieceMoves(int type, int spot, uint64_t board){
-	uint64_t *moves;
+void getPieceMoves(int type, int spot, uint64_t board,uint64_t *moves){
 	uint64_t temp;
-	int count = 0;
+	int count = moves[0]+1;
 	switch(type){
 	case 1:
-		moves = malloc(5 *sizeof(board));
 		temp = findRight(spot, board);
 		if (temp != 0){
 			moves[count] = temp;
@@ -108,11 +195,10 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 			moves[count] = temp;
 			count +=1;
 		}
-		moves[count] = 0;
-		return moves;
+		moves[0]=count-1;
+		//return moves;
 		break;
 	case 2:
-		moves = malloc(5 *sizeof(board));
 		temp = findRight(spot, board);
 		if (temp != 0){
 			moves[count] = temp;
@@ -133,11 +219,10 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 			moves[count] = temp;
 			count +=1;
 		}
-		moves[count] = 0;
-		return moves;
+				moves[0]=count-1;
+				//return moves;
 		break;
 	case 3:
-		moves = malloc(5 *sizeof(board));
 		temp = findLeft(spot, board);
 		if (temp != 0){
 			moves[count] = temp;
@@ -158,11 +243,10 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 			moves[count] = temp;
 			count +=1;
 		}
-		moves[count] = 0;
-		return moves;
+		moves[0]=count-1;
+		//	return moves;
 		break;
 	case 4:
-		moves = malloc(5 *sizeof(board));
 		temp = findLeft(spot, board);
 		if (temp != 0){
 			moves[count] = temp;
@@ -183,11 +267,10 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 			moves[count] = temp;
 			count +=1;
 		}
-		moves[count] = 0;
-		return moves;
+		moves[0]=count-1;
+		//		return moves;
 		break;
 	case 5:
-		moves = malloc(7 *sizeof(board));
 		temp = findRight(spot, board);
 		if (temp != 0){
 			moves[count] = temp;
@@ -218,11 +301,10 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 			moves[count] = temp;
 			count +=1;
 		}
-		moves[count] = 0;
-		return moves;
+		moves[0]=count-1;
+		//		return moves;
 		break;
 	case 6:
-		moves = malloc(7 *sizeof(board));
 		temp = findRight(spot, board);
 		if (temp != 0){
 			moves[count] = temp;
@@ -253,11 +335,10 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 			moves[count] = temp;
 			count +=1;
 		}
-		moves[count] = 0;
-		return moves;
+		moves[0]=count-1;
+		//		return moves;
 		break;
 	case 7:
-		moves = malloc(7 *sizeof(board));
 		temp = findRight(spot, board);
 		if (temp != 0){
 			moves[count] = temp;
@@ -288,11 +369,10 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 			moves[count] = temp;
 			count +=1;
 		}
-		moves[count] = 0;
-		return moves;
+		moves[0]=count-1;
+		//	return moves;
 		break;
 	case 8:
-		moves = malloc(7 *sizeof(board));
 		temp = findDown(spot, board);
 		if (temp != 0){
 			moves[count] = temp;
@@ -323,11 +403,10 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 			moves[count] = temp;
 			count +=1;
 		}
-		moves[count] = 0;
-		return moves;
+		moves[0]=count-1;
+		//		return moves;
 		break;
 	case 9:
-		moves = malloc(9 *sizeof(board));
 		temp = findRight(spot, board);
 		if (temp != 0){
 			moves[count] = temp;
@@ -368,12 +447,11 @@ uint64_t *getPieceMoves(int type, int spot, uint64_t board){
 			moves[count] = temp;
 			count +=1;
 		}
-		moves[count] = 0;
-		return moves;
+		moves[0]=count-1;
+		//	return moves;
 		break;
 	}
-	return NULL;
-}
+	}
 uint64_t findRight(int spot, uint64_t board){
 	int toSpot;
 	int spaceSpot;

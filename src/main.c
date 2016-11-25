@@ -92,7 +92,7 @@ int main(int argc, char **argv){
 			temp =0;
 			printBoard(board);
 
-			if (!game_over(board, 'W'))
+			if (game_over(board, 'W'))
 				break;
 			board = alpha_beta_search(board, count_movable, 0);
 			printBoard(board);

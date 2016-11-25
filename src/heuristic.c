@@ -10,7 +10,7 @@ int game_over(uint64_t board, char player) {
 	int w_movable = 0;
 	int b_movable = 0;
 	uint64_t o = 1; // a 64-bit version of 1 so we can shift it
-#ifdef DEBUG
+#ifdef DEBUG_GAMEOVER
 	fprintf(stderr, "Testing for game over\n");
 	printf("%" PRIx64 "\n", board);
 #endif
@@ -43,7 +43,7 @@ int game_over(uint64_t board, char player) {
 			continue;
 		}
 	}
-#ifdef DEBUG
+#ifdef DEBUG_GAMEOVER
 	fprintf(stderr, "Movable black pieces: %d\n", b_movable);
 	fprintf(stderr, "Movable white pieces: %d\n", w_movable);
 #endif
@@ -59,7 +59,7 @@ int count_movable(uint64_t board) {
 	int w_movable = 0;
 	int b_movable = 0;
 	uint64_t o = 1; // a 64-bit version of 1 so we can shift it
-#ifdef DEBUG
+#ifdef DEBUG_HEUR
 	fprintf(stderr, "Heuristic analyzing ");
 	printf("%" PRIx64 "\n", board);
 #endif
@@ -92,7 +92,7 @@ int count_movable(uint64_t board) {
 			continue;
 		}
 	}
-#ifdef DEBUG
+#ifdef DEBUG_HEUR
 	fprintf(stderr, "Movable black pieces: %d\n", b_movable);
 	fprintf(stderr, "Movable white pieces: %d\n", w_movable);
 #endif

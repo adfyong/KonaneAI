@@ -3,7 +3,8 @@
 #include <time.h>
 
 struct minimax {
-	struct minimax **children;
+	struct minimax *children;
+	int child_count;
 	uint64_t board;
 	int value;
 };
@@ -27,3 +28,6 @@ int max(int a, int b);
 
 /* returns the min of a and b */
 int min(int a, int b);
+
+
+void free_minimax(struct minimax *tree);

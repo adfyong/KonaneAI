@@ -4,6 +4,7 @@
 
 struct minimax {
 	struct minimax *children;
+	int child_count;
 	uint64_t board;
 	int value;
 };

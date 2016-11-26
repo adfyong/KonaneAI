@@ -79,6 +79,8 @@ uint64_t makeMove(uint64_t board, int argc, int argv, char argv1){
 	int trow = argv /8;
 	int tcol = argv %8;
 	int spotV;
+	int spotVDoub;
+	int spaceVDoub;
 	if(findColor(argc) == argv1 && findColor(argv)== argv1 && argc >=0 && argc<=63 && argv >=0 && argv <=63){
 		switch(diff){
 		case 16:
@@ -129,7 +131,66 @@ uint64_t makeMove(uint64_t board, int argc, int argv, char argv1){
 					break;
 				}
 			}
-			
+		case 4:
+			if(trow == frow){
+				spotV= (board >>(argc+1)) &1;
+				spaceVDoub =(board >>(argc+2))&1;
+				spotVDoub = (board >> (argc+3))&1;
+				if(spotV==1 && spaceVDoub==0 && spotVDoub ==1){
+					temp=board;
+					temp ^= toggle<<argc;
+					temp ^= toggle<<(argc+1);
+					temp ^= toggle<<(argc+3);
+					temp ^= toggle <<argv;
+					return temp;
+					break;
+				}
+			}
+		case -4:
+			if(trow == frow){
+				spotV= (board >>(argc-1)) &1;
+				spaceVDoub =(board >>(argc-2))&1;
+				spotVDoub = (board >> (argc-3))&1;
+				if(spotV==1 && spaceVDoub==0 && spotVDoub ==1){
+					temp=board;
+					temp ^= toggle<<argc;
+					temp ^= toggle<<(argc-1);
+					temp ^= toggle<<(argc-3);
+					temp ^= toggle <<argv;
+					return temp;
+					break;
+				}
+			}
+		case 32:
+			if(tcol == fcol){
+				spotV= (board >>(argc+8)) &1;
+				spaceVDoub =(board >>(argc+16))&1;
+				spotVDoub = (board >> (argc+24))&1;
+				if(spotV==1 && spaceVDoub==0 && spotVDoub ==1){
+					temp=board;
+					temp ^= toggle<<argc;
+					temp ^= toggle<<(argc+8);
+					temp ^= toggle<<(argc+24);
+					temp ^= toggle <<argv;
+					return temp;
+					break;
+				}
+			}
+		case -32:
+			if(tcol == fcol){
+				spotV= (board >>(argc-8)) &1;
+				spaceVDoub =(board >>(argc-16))&1;
+				spotVDoub = (board >> (argc-24))&1;
+				if(spotV==1 && spaceVDoub==0 && spotVDoub ==1){
+					temp=board;
+					temp ^= toggle<<argc;
+					temp ^= toggle<<(argc-8);
+					temp ^= toggle<<(argc-24);
+					temp ^= toggle <<argv;
+					return temp;
+					break;
+				}
+			}
 		}
 	}
 	return temp;

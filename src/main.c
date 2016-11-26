@@ -36,7 +36,6 @@ int main(int argc, char **argv){
 		//board = temp;
 	//	printBoard(board);
 		temp =0;
-		int i;
 		while (!game_over(board, 'W')) {
 			if (game_over(board, 'B'))
 					break;
@@ -78,7 +77,6 @@ int main(int argc, char **argv){
 		//board = makeInitialMove(board, 28, 'W');
 		printBoard(board);
 		temp =0;
-		int i;
 		while (!game_over(board, 'B')) {
 			while (temp == 0) { 
 				printf("Enter your desired  move(from to): ");

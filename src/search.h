@@ -28,6 +28,3 @@ int max(int a, int b);
 
 /* returns the min of a and b */
 int min(int a, int b);
-
-
-void free_minimax(struct minimax *tree);

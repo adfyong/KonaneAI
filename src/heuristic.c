@@ -22,7 +22,7 @@ int game_over(uint64_t board, char player) {
 	printf("%" PRIx64 "\n", board);
 #endif
 	for (int i = 0; i < 64; ++i) {
-		if (!(board & (1 << i)))
+		if (!(board & (o << i)))
 			// bit is unset
 			continue;
 

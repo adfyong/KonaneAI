@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #include <inttypes.h>
 
+#define IS_BLACK(i) (((i/8) % 2) == (i % 2))
+#define POS_NUM(i) (i/8 + 1)
+#define POS_LETTER(i) (7 - (i%8) + 'A')
+
 int make_initial_move(uint64_t, char);
 void get_move_indices(uint64_t, uint64_t, int *);
 void printBoard(uint64_t board);

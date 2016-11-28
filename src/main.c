@@ -3,11 +3,6 @@
 #include "heuristic.h"
 #include <ctype.h>
 
-#define IS_BLACK(i) (((i/8) % 2) == (i % 2))
-
-#define POS_NUM(i) (i/8 + 1)
-#define POS_LETTER(i) (7 - (i%8) + 'A')
-
 int main(int argc, char **argv){
 	uint64_t board =0;
 	FILE *boardf;

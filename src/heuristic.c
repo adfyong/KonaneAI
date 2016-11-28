@@ -2,14 +2,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 
-#ifdef DEBUG_HEUR
 #include "board.h"
-#endif
-
-#define IS_BLACK(i) (((i/8) % 2) == (i % 2))
-
-#define POS_NUM(i) (i/8 + 1)
-#define POS_LETTER(i) (7 - (i%8) + 'a')
 
 /* For player, detect if there are no more moves remaining */
 // TODO TODO TODO: this is doing twice as much work as necessary

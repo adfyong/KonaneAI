@@ -1,105 +1,196 @@
 #include "board.h"
 #include "search.h"
 #include "heuristic.h"
+#include <ctype.h>
 
 int main(int argc, char **argv){
 	uint64_t board =0;
 	FILE *boardf;
 
 	boardf = fopen(argv[1], "r");
-	char f;
-	f = fgetc(boardf);
-	while(f != EOF){
-		
-		if (f == 'B' || f == 'W')
-			board = board | 1;
-		
-		f = fgetc(boardf);
-		if (f == 'B' || f == 'W' || f == 'O')
-			board = board << 1;
-	};
-	if (argv[2][0] == 'W'){     
-		//board = makeInitialMove(board, 27, 'B');
-		char fletter;
-		int fnumb;
-		char tletter;
-		int tnumb;
-		uint64_t temp =0;
-		printBoard(board);
-		/*
-		while(temp ==0){
-			printf("Enter your desired initial move(d4, e5): ");
-			scanf(" %c %d", &fletter, &fnumb);
-			temp = makeInitialMove(board, findValue(fletter, fnumb), argv[2][0]);
-		}
-		*/
-		//board = temp;
-	//	printBoard(board);
-		temp =0;
-		while (!game_over(board, 'W')) {
-			if (game_over(board, 'B'))
-					break;
-			board = alpha_beta_search(board, count_movable, 1);
-			printBoard(board);
-
-			while(temp == 0) {
-				printf("Enter your desired  move(from to): ");
-				scanf(" %c %d %c %d", &fletter, &fnumb, &tletter, &tnumb);
-
-				temp = makeMove(board, findValue(fletter, fnumb), findValue(tletter, tnumb), argv[2][0]);
-
-				printf("\n\n");
-			}
-			board = temp;
-			temp =0;
-			printBoard(board);
-		}
-
-		printf("Game over\n");
-
+	if (!boardf) {
+		fprintf(stderr, "ERROR: Could not open board file\n");
+		exit(1);
 	}
-	else if(argv[2][0] == 'B'){
-		char fletter;
-		int fnumb;
-		char tletter;
-		int tnumb;
-		uint64_t temp =0;
-		/*
-		while(temp ==0){
-			printBoard(board);
-			printf("Enter your desired initial move(d5, e4): ");
-			scanf(" %c %d", &fletter, &fnumb);
-			temp = makeInitialMove(board, findValue(fletter, fnumb), argv[2][0]);
-		}
-		*/
-	//	board = temp;
-	//	printBoard(board);
-		//board = makeInitialMove(board, 28, 'W');
-		printBoard(board);
-		temp =0;
-		while (!game_over(board, 'B')) {
-			while (temp == 0) { 
-				printf("Enter your desired  move(from to): ");
-				scanf(" %c %d %c %d", &fletter, &fnumb, &tletter, &tnumb);
-			       
-				temp = makeMove(board, findValue(fletter, fnumb), findValue(tletter, tnumb), argv[2][0]);
-				
-				printf("\n\n");
-			}
-			board = temp;
-			temp =0;
-			printBoard(board);
 
-			if (game_over(board, 'W'))
+	if (argc < 3 || (argv[2][0] != 'B' && argv[2][0] != 'W')) {
+		fprintf(stderr, "ERROR: Invalid player selection\n");
+		exit(1);
+	}
+
+	int b_pieces = 0;
+	int w_pieces = 0;
+	int size = 63;
+	for (char f = getc(boardf); f != EOF; f = getc(boardf)) {
+		if (size < -1) {
+			fprintf(stderr, "ERROR: Too many pieces\n");
+			exit(1);
+		}
+
+		if (isspace(f)) continue;
+
+		board <<= 1;
+
+		switch(f) {
+			case 'B':
+				if (!IS_BLACK(size)) {
+					fprintf(stderr, "ERROR: Expected W at %c%d\n",
+							POS_LETTER(size), POS_NUM(size));
+					exit(1);
+				}
+				++b_pieces;
+				board |= 1;
 				break;
-			board = alpha_beta_search(board, count_movable, 0);
-			printBoard(board);
+			case 'W':
+				if (IS_BLACK(size)) {
+					fprintf(stderr, "ERROR: Expected B at %c%d\n",
+							POS_LETTER(size), POS_NUM(size));
+					exit(1);
+				}
+				++w_pieces;
+				board |= 1;
+				break;
+			case 'O':
+				break;
+			default:
+				fprintf(stderr, "ERROR: Unexpected character (%c) at %c%d\n", f,
+						POS_LETTER(size), POS_NUM(size));
+				exit(1);
+				break;
 		}
 
-		printf("Game over\n");
+		--size;
 	}
 
-	
-//printf("%" PRIx64 "\n", alpha_beta_search(board, count_movable, 1));
-	
+	if (size > -1) {
+		fprintf(stderr, "ERROR: Unexpected end of file\n");
+		printf("Size: %d\n", size);
+		exit(1);
+	}
+
+#ifdef PRETTY
+	printBoard(board);
+#endif
+
+	// printf("Black %d\nWhite %d\n", b_pieces, w_pieces);
+
+	int black = (argv[2][0] == 'B' ? 1 : 0);
+
+	if (b_pieces == 32 || w_pieces == 32) {
+		if ((black && b_pieces == 31) || (!black && b_pieces == 32)) {
+			fprintf(stderr, "WARNING: this should not be an valid state!\n"
+					"But as Calin says, YOU'RE THE MASTER\n");
+		}
+#ifdef PRETTY
+		fprintf(stderr, "Making initial move...\n");
+#endif
+		int move = make_initial_move(board, argv[2][0]);
+		board &= ~((uint64_t)1 << move);
+		printf("%c%d\n", POS_LETTER(move), POS_NUM(move));
+		black ? --b_pieces : --w_pieces;
+		black ^= 1;
+
+		if (b_pieces < 32 && w_pieces < 32) {
+			// TODO: there's a goto here................................
+			// because I forgot about this case.........................
+			goto OPPONENT_MOVE;
+		}
+
+		while ((black && b_pieces == 32) || (!black && w_pieces == 32)) {
+#ifdef PRETTY
+			printf("Pick a piece to remove: ");
+#endif
+			int num;
+			char letter;
+			scanf(" %c%d", &letter, &num);
+			letter = toupper(letter);
+			int bit = (num-1) * 8 + (7 - (letter - 'A'));
+			if (letter < 'A' || letter > 'H' || num < 1 || num > 8) {
+				fprintf(stderr, "Clearly, an invalid move\n");
+				continue;
+			}
+
+			if ((black && !IS_BLACK(bit)) || (!black && IS_BLACK(bit))) {
+				fprintf(stderr, "That's not your piece, doofus\n");
+				continue;
+			}
+
+			if (!(board & ((uint64_t)1 << bit))) {
+				fprintf(stderr, "No piece there, hoss...\n");
+				continue;
+			}
+
+			if ((black && bit != 36 && bit != 27) ||
+					(!black && bit != 35 && bit != 28)) {
+				fprintf(stderr, "You picked a move you shouldn't have, but"
+						" who am I to stop you?\n");
+			}
+
+			board &= ~((uint64_t)1 << bit);
+			black ^= 1;
+			break;
+		}
+	}
+
+	while (1) {
+#ifdef PRETTY
+		printBoard(board);
+#endif
+
+		if (game_over(board, black))
+			break;
+
+#ifdef SKIP_AB
+		uint64_t moves[32];
+		getMoves(black, board, moves);
+		uint64_t move = moves[1];
+#else // do alpha beta
+		uint64_t move = alpha_beta_search(board, count_movable, black);
+#endif
+		black ^= 1;
+
+		int indices[2];
+		get_move_indices(board, move, indices);
+		printf("%c%d-%c%d\n", POS_LETTER(indices[0]), POS_NUM(indices[0]),
+				POS_LETTER(indices[1]), POS_NUM(indices[1]));
+
+		board = move;
+
+OPPONENT_MOVE:
+
+#ifdef PRETTY
+		printBoard(board);
+#endif
+
+		if (game_over(board, black))
+			break;
+
+		move = 0;
+
+		while (move == 0) {
+			char fletter, tletter;
+			int fnumb, tnumb;
+#ifdef PRETTY
+			printf("Make a move: ");
+#endif
+			scanf(" %c%d-%c%d", &fletter, &fnumb, &tletter, &tnumb);
+			fletter = tolower(fletter);
+			tletter = tolower(tletter);
+
+			move = makeMove(board, findValue(fletter, fnumb),
+					findValue(tletter, tnumb), black ? 'B' : 'W');
+
+#ifdef PRETTY
+			printf("\n\n");
+#endif
+		}
+
+		board = move;
+		move = 0;
+
+		black ^= 1;
+	}
+
+	printf("Game over! %s wins!\n", black ? "White" : "Black");
+	return 0;
 }

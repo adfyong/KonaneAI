@@ -1,6 +1,39 @@
 #include "board.h"
 
+int make_initial_move(uint64_t board, char player) {
+	uint64_t o = 1;
+	if (player == 'B') {
+		if (board & (o << 36))
+			return 36;	// D5
+		else
+			return 27;	// E4
+	} else {
+		if (board & (o << 35))
+			return 35;	// E5
+		else
+			return 28;	// D4
+	}
+}
 
+void get_move_indices(uint64_t from, uint64_t to, int *move) {
+	uint64_t o = 1;
+	move[0] = move[1] = -1;
+	for (int i = 0; i < 64; ++i) {
+		if (move[1] == -1 && !(from & (o << i)) && to & (o << i)) {
+			move[1] = i;
+			continue;
+		}
+
+		if (move[0] == -1 && from & (o << i) && !(to & (o << i)) &&
+				(move[1] == -1 || (IS_BLACK(move[1]) == IS_BLACK(i)))) {
+			move[0] = i;
+			continue;
+		}
+
+		if (move[0] != -1 && move[1] != -1)
+			return;
+	}
+}
 
 void printBoard(uint64_t board){
 	uint64_t spotV;

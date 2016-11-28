@@ -72,6 +72,11 @@ int main(int argc, char **argv){
 	printBoard(board);
 #endif
 
+	uint64_t moves[10] = {0};
+	getMoves(argv[2][0] == 'B', board, moves);
+	for (int i = 1; i < 10; i++)
+		printBoard(moves[i]);
+	return 0;
 	// printf("Black %d\nWhite %d\n", b_pieces, w_pieces);
 
 	int black = (argv[2][0] == 'B' ? 1 : 0);

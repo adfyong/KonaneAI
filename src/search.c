@@ -30,9 +30,9 @@ uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t), int me)
 		time_t end = time(NULL);
 	}
 
-	//#ifdef DEBUG
+#ifdef DEBUG
 	printf("The final value was %d\n", value);
-	//#endif
+#endif
 
 	/* 
 	   find the node with the value that was returned by the 
@@ -62,7 +62,7 @@ int max_value(struct minimax *state, int alpha, int beta,
 		return v;
 	}
 	
-	uint64_t moves[32] = {0};
+	uint64_t moves[33] = {0};
 	getMoves(me, state->board, moves);
 	int count = 0;
 	while (*(moves+count+1) != 0)
@@ -125,7 +125,7 @@ int min_value(struct minimax *state, int alpha, int beta,
 		return v;
 	}
 	
-	uint64_t moves[32] = {0};
+	uint64_t moves[33] = {0};
 	getMoves(me, state->board, moves);
 	int count = 0;
 	while (*(moves+count+1) != 0)

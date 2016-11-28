@@ -561,32 +561,6 @@ uint64_t findRight(int spot, uint64_t board){
 	}
 	return temp;
 }
-uint64_t findDoubleRight(int spot, uint64_t board){
-	int toSpot;
-	int spaceSpot;
-	int doubleTo;
-	int doubleSpace;
-	int spotCol;
-	int toCol;
-	uint64_t toggle =1;
-	uint64_t temp = 0;
-
-	toSpot = (board>>(spot-2)) & 1;
-	spaceSpot = (board >>(spot-1)) & 1;
-	doubleTo = (board >>(spot-4))&1;
-	doubleSpace = (board >>(spot-3))&1;
-	spotCol = spot /8;
-	toCol = (spot -4)/8;
-	if (toSpot ==0 && spaceSpot ==1 && doubleTo ==0 && doubleSpace ==1 && toCol==spotCol && (spot-4)>=0){
-		temp = board;
-		toggle ^= toggle<<spot;
-		temp ^= toggle<<(spot-1);
-		temp ^= toggle<<(spot -3);
-		temp ^= toggle<< (spot-4);
-	}
-	return temp;
-}
-
 
 uint64_t findLeft(int spot, uint64_t board){
 	int toSpot;
@@ -603,6 +577,34 @@ uint64_t findLeft(int spot, uint64_t board){
 	}
 	return temp;
 }
+
+uint64_t findDoubleRight(int spot, uint64_t board){
+	int toSpot;
+	int spaceSpot;
+	int doubleTo;
+	int doubleSpace;
+	int spotCol;
+	int toCol;
+	uint64_t toggle =1;
+	uint64_t temp = 0;
+
+	toSpot = (board>>(spot-2)) & 1; //middle spot
+	spaceSpot = (board >>(spot-1)) & 1; //spot to the right of piece we want to move
+	doubleTo = (board >>(spot-4))&1;  //spot we want to jump to
+	doubleSpace = (board >>(spot-3))&1; // space to the left of the spot we want to move to
+	
+	spotCol = spot /8;
+	toCol = (spot -4)/8;
+	if (toSpot ==0 && spaceSpot ==1 && doubleTo ==0 && doubleSpace ==1 && toCol==spotCol && (spot-4)>=0){
+		temp = board;
+		temp ^= toggle<<spot;
+		temp ^= toggle<<(spot-1);
+		temp ^= toggle<<(spot -3);
+		temp ^= toggle<< (spot-4);
+	}
+	return temp;
+}
+
 uint64_t findDoubleLeft(int spot, uint64_t board){
 	int toSpot;
 	int spaceSpot;
@@ -612,15 +614,17 @@ uint64_t findDoubleLeft(int spot, uint64_t board){
 	int spotCol;
 	uint64_t toggle =1;
 	uint64_t temp = 0;
+
 	toSpot = (board>>(spot+2)) & 1;
 	spaceSpot = (board >>(spot+1)) & 1;
 	doubleTo = (board >>(spot+4))&1;
 	doubleSpace = (board >>(spot+3))&1;
+	
 	spotCol = spot /8;
 	toCol = (spot+4)/8;
 	if (toSpot ==0 && spaceSpot ==1 && doubleTo ==0 && doubleSpace ==1 && toCol == spotCol && (spot+4)<=63){
 		temp = board;
-		toggle ^= toggle<<spot;
+		temp ^= toggle<<spot;
 		temp ^= toggle<<(spot+1);
 		temp ^= toggle<<(spot +3);
 		temp ^= toggle<< (spot+4);
@@ -661,7 +665,7 @@ uint64_t findDoubleUp(int spot, uint64_t board){
 	toRow = (spot +32) % 8;
 	if (toSpot ==0 && spaceSpot ==1 && doubleTo ==0 && doubleSpace ==1 && spotRow == toRow && (spot+32)<=63){
 		temp = board;
-		toggle ^= toggle<<spot;
+		temp ^= toggle<<spot;
 		temp ^= toggle<<(spot+8);
 		temp ^= toggle<<(spot +24);
 		temp ^= toggle<< (spot+32);
@@ -701,7 +705,7 @@ uint64_t findDoubleDown(int spot, uint64_t board){
 	toRow = (spot-32)% 8;
 	if (toSpot ==0 && spaceSpot ==1 && doubleTo ==0 && doubleSpace ==1 && toRow == spotRow && (spot-32)>=0){
 		temp = board;
-		toggle ^= toggle<<spot;
+		temp ^= toggle<<spot;
 		temp ^= toggle<<(spot-8);
 		temp ^= toggle<<(spot -24);
 		temp ^= toggle<< (spot-32);

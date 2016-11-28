@@ -68,7 +68,9 @@ int main(int argc, char **argv){
 		exit(1);
 	}
 
+#ifdef PRETTY
 	printBoard(board);
+#endif
 
 	// printf("Black %d\nWhite %d\n", b_pieces, w_pieces);
 
@@ -79,7 +81,9 @@ int main(int argc, char **argv){
 			fprintf(stderr, "WARNING: this should not be an valid state!\n"
 					"But as Calin says, YOU'RE THE MASTER\n");
 		}
+#ifdef PRETTY
 		fprintf(stderr, "Making initial move...\n");
+#endif
 		int move = make_initial_move(board, argv[2][0]);
 		board &= ~((uint64_t)1 << move);
 		printf("%c%d\n", POS_LETTER(move), POS_NUM(move));
@@ -93,7 +97,9 @@ int main(int argc, char **argv){
 		}
 
 		while ((black && b_pieces == 32) || (!black && w_pieces == 32)) {
+#ifdef PRETTY
 			printf("Pick a piece to remove: ");
+#endif
 			int num;
 			char letter;
 			scanf(" %c%d", &letter, &num);
@@ -127,7 +133,9 @@ int main(int argc, char **argv){
 	}
 
 	while (1) {
+#ifdef PRETTY
 		printBoard(board);
+#endif
 
 		if (game_over(board, black))
 			break;
@@ -143,14 +151,16 @@ int main(int argc, char **argv){
 
 		int indices[2];
 		get_move_indices(board, move, indices);
-		printf("%c%d-%c%d\n\n", POS_LETTER(indices[0]), POS_NUM(indices[0]),
+		printf("%c%d-%c%d\n", POS_LETTER(indices[0]), POS_NUM(indices[0]),
 				POS_LETTER(indices[1]), POS_NUM(indices[1]));
 
 		board = move;
 
 OPPONENT_MOVE:
 
+#ifdef PRETTY
 		printBoard(board);
+#endif
 
 		if (game_over(board, black))
 			break;
@@ -160,7 +170,9 @@ OPPONENT_MOVE:
 		while (move == 0) {
 			char fletter, tletter;
 			int fnumb, tnumb;
+#ifdef PRETTY
 			printf("Make a move: ");
+#endif
 			scanf(" %c%d-%c%d", &fletter, &fnumb, &tletter, &tnumb);
 			fletter = tolower(fletter);
 			tletter = tolower(tletter);
@@ -168,7 +180,9 @@ OPPONENT_MOVE:
 			move = makeMove(board, findValue(fletter, fnumb),
 					findValue(tletter, tnumb), black ? 'B' : 'W');
 
+#ifdef PRETTY
 			printf("\n\n");
+#endif
 		}
 
 		board = move;

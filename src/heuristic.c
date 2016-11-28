@@ -5,7 +5,6 @@
 #include "board.h"
 
 /* For player, detect if there are no more moves remaining */
-// TODO TODO TODO: this is doing twice as much work as necessary
 int game_over(uint64_t board, int black) {
 	int movable = 0;
 	uint64_t o = 1; // a 64-bit version of 1 so we can shift it

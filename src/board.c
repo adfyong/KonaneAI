@@ -1,6 +1,57 @@
 #include "board.h"
 
+int make_initial_move(uint64_t board, char player) {
+	uint64_t o = 1;
+	if (player == 'B') {
+		if (board & (o << 36))
+			return 36;	// D5
+		else
+			return 27;	// E4
+	} else {
+		if (board & (o << 35))
+			return 35;	// E5
+		else
+			return 28;	// D4
+	}
+}
 
+void get_move_indices(uint64_t from, uint64_t to, int *move) {
+	uint64_t o = 1;
+	for (int i = 0; i < 64; ++i) {
+		if (!(from & (o << i)) && to & (o << i)) {
+			move[0] = move[1] = i;
+			break;
+		}
+	}
+
+	// up
+	while (move[0] < 48 && (from & (o << (move[0]+16))) &&
+			!(to & (o << (move[0]+16)))) {
+		move[0] += 16;
+	}
+	if (move[0] != move[1]) return;
+
+	// left
+	if ((move[0]%8 < 5) && (from & (o << (move[0]+2))) &&
+			!(to & (o << (move[0]+2)))) {
+		move[0] += 2;
+	}
+	if (move[0] != move[1]) return;
+
+	// down
+	while (move[0] > 15 && (from & (o << (move[0]-16))) &&
+			!(to & (o << (move[0]-16)))) {
+		move[0] -= 16;
+	}
+	if (move[0] != move[1]) return;
+
+	// right
+	if ((move[0]%8 > 1) && (from & (o << (move[0]-2))) &&
+			!(to & (o << (move[0]-2)))) {
+		move[0] -= 2;
+	}
+	return;
+}
 
 void printBoard(uint64_t board){
 	uint64_t spotV;

@@ -101,7 +101,7 @@ int main(int argc, char **argv){
 			printf("Pick a piece to remove: ");
 			int num;
 			char letter;
-			scanf("%c%d", &letter, &num);
+			scanf(" %c%d", &letter, &num);
 			letter = toupper(letter);
 			int bit = (num-1) * 8 + (7 - (letter - 'A'));
 			if (letter < 'A' || letter > 'H' || num < 1 || num > 8) {
@@ -166,7 +166,7 @@ OPPONENT_MOVE:
 			char fletter, tletter;
 			int fnumb, tnumb;
 			printf("Make a move: ");
-			scanf("%c%d-%c%d", &fletter, &fnumb, &tletter, &tnumb);
+			scanf(" %c%d-%c%d", &fletter, &fnumb, &tletter, &tnumb);
 			fletter = tolower(fletter);
 			tletter = tolower(tletter);
 

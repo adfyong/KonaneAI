@@ -32,7 +32,7 @@ void get_move_indices(uint64_t from, uint64_t to, int *move) {
 	if (move[0] != move[1]) return;
 
 	// left
-	if ((move[0]%8 < 5) && (from & (o << (move[0]+2))) &&
+	if ((move[0]%8 < 6) && (from & (o << (move[0]+2))) &&
 			!(to & (o << (move[0]+2)))) {
 		move[0] += 2;
 	}

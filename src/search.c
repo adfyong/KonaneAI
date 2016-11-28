@@ -6,7 +6,7 @@
 #include "board.h"
 #include "heuristic.h"
 
-#define THINKING_TIME  10
+#define THINKING_TIME  5
 #define INIT_ALPHA    (-65)
 #define INIT_BETA      65
 #define DONE printf("done\n")
@@ -18,19 +18,21 @@ uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t), int me)
 	state->board = board;
 	state->value = INIT_ALPHA;
 	
-	time_t start = time(NULL);
+	time_t start_thinking = time(NULL);
 	int value;
 
 	/* Time Limited Iterative Deepening Alpha-Beta Search */
-	for (int depth = 1; time(NULL) < (start + THINKING_TIME); depth++) {
+	for (int depth = 1; time(NULL) < (start_thinking + THINKING_TIME); depth++) {	       
 		if (state->children)
 			free(state->children);
+		time_t start = time(NULL);
 		value = max_value(state, INIT_ALPHA, INIT_BETA, 1, depth, eval, me);
+		time_t end = time(NULL);
 	}
 
-#ifdef DEBUG
+	//#ifdef DEBUG
 	printf("The final value was %d\n", value);
-#endif
+	//#endif
 
 	/* 
 	   find the node with the value that was returned by the 
@@ -48,8 +50,9 @@ uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t), int me)
 int max_value(struct minimax *state, int alpha, int beta,
 	      int depth, int max_depth, int(*eval)(uint64_t), int me)
 {
+	int v = INIT_ALPHA;
 	if (depth >= max_depth) {
-		int v = eval(state->board);
+		v = eval(state->board);
 		
 #ifdef DEBUG
 		printf("MAX: max_depth reached in max_value\n");
@@ -59,23 +62,16 @@ int max_value(struct minimax *state, int alpha, int beta,
 		return v;
 	}
 	
-	int v = INIT_ALPHA;
-	uint64_t moves[32];
+	uint64_t moves[32] = {0};
 	getMoves(me, state->board, moves);
-	state->children = calloc(*moves, sizeof(struct minimax));
+	int count = 0;
+	while (*(moves+count+1) != 0)
+		count++;
+	state->children = calloc(count, sizeof(struct minimax));
 	state->child_count = *moves;
-	
-	if (*moves == 0) {
-		v = eval(state->board);
-		
-#ifdef DEBUG
-		printf("MAX: no more moves at depth %d, the value is $d\n", depth, v);
-#endif
-		
-		return v;
-	}
 
-	for (int i = 1; i < *moves-1; i++) {
+
+	for (int i = 1; i <= count; i++) {
 
 		state->children[i-1].board = moves[i];
 
@@ -117,8 +113,10 @@ int max_value(struct minimax *state, int alpha, int beta,
 int min_value(struct minimax *state, int alpha, int beta,
 	      int depth, int max_depth, int(*eval)(uint64_t), int me)
 {
+	int v = INIT_BETA;
+	
 	if (depth >= max_depth) {
-		int v = eval(state->board);
+		v = eval(state->board);
 #ifdef DEBUG
 		printf("MIN: max_depth reached in max_value\n");
 		printf("MIN: the value of v @ max_depth is %d\n", v);
@@ -126,26 +124,16 @@ int min_value(struct minimax *state, int alpha, int beta,
 
 		return v;
 	}
-       
-	int v = INIT_BETA;
 	
-	uint64_t moves[32];
+	uint64_t moves[32] = {0};
 	getMoves(me, state->board, moves);
+	int count = 0;
+	while (*(moves+count+1) != 0)
+		count++;
+	state->children = calloc(count, sizeof(struct minimax));
+	state->child_count = *moves;
 	
-	state->children = calloc(moves[0], sizeof(struct minimax));
-	state->child_count = moves[0];
-	
-	if (*moves == 0) {
-		int v = eval(state->board);
-		
-#ifdef DEBUG
-		printf("MIN: no more moves at depth %d, the value \n", depth, v);
-#endif
-		
-		return v;
-	}
-	
-	for (int i = 1; i < moves[0]-1; i++) {
+	for (int i = 1; i <= count; i++) {
 		
 		state->children[i-1].board = moves[i];
 		

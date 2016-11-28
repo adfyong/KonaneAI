@@ -70,17 +70,8 @@ int max_value(struct minimax *state, int alpha, int beta,
 	state->children = calloc(count, sizeof(struct minimax));
 	state->child_count = *moves;
 
-/* 	if (*moves == 0) { */
-/* 		v = eval(state->board); */
-		
-/* #ifdef DEBUG */
-/* 		printf("MAX: no more moves at depth %d, the value is %d\n", depth, v); */
-/* #endif */
-		
-/* 		return v; */
-/* 	} */
 
-	for (int i = 1; moves[i] != 0; i++) {
+	for (int i = 1; i <= count; i++) {
 
 		state->children[i-1].board = moves[i];
 
@@ -142,17 +133,7 @@ int min_value(struct minimax *state, int alpha, int beta,
 	state->children = calloc(count, sizeof(struct minimax));
 	state->child_count = *moves;
 	
-	/* if (*moves == 0) { */
-/* 		v = eval(state->board); */
-		
-/* #ifdef DEBUG */
-/* 		printf("MIN: no more moves at depth %d, the value is %d\n", depth, v); */
-/* #endif */
-		
-/* 		return v; */
-/* 	} */
-	
-	for (int i = 1; moves[i] != 0; i++) {
+	for (int i = 1; i <= count; i++) {
 		
 		state->children[i-1].board = moves[i];
 		

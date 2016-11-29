@@ -74,19 +74,17 @@ void printBoard(uint64_t board){
 //bool gameOver(uint64_t board, int argc){
 //	return true;
 //}
-int findValue(char argc, int argv){
+int findValue(char space_letter, int space_number){
 	int value;
-	//	printf("%i\n", argc);
-	value = (7-((int)argc-97))+((argv-1)*8);
-	//printf("%d \n", value);
+	value = (7-((int)space_letter-97))+((space_number-1)*8);
 	return value;
 
 }
 
-char findColor(int argc){
+char findColor(int space_value){
 	char color;
-	int row = argc /8;
-	int col = argc % 8;
+	int row = space_value /8;
+	int col = space_value % 8;
 	if (row %2 == 0){
 		if (col % 2 == 0)
 			color = 'B';
@@ -103,123 +101,123 @@ char findColor(int argc){
 	return color;
 }
 
-uint64_t makeMove(uint64_t board, int argc, int argv, char argv1){
+uint64_t makeMove(uint64_t board, int from_value, int to_value, char player){
 	uint64_t temp = 0;
 	uint64_t toggle = 1;
-	int diff = argv - argc;
-	int frow = argc /8;
-	int fcol = argc % 8;
-	int trow = argv /8;
-	int tcol = argv %8;
+	int diff = to_value - from_value;
+	int frow = from_value /8;
+	int fcol = from_value % 8;
+	int trow = to_value /8;
+	int tcol = to_value %8;
 	int spotV;
 	int spotVDoub;
 	int spaceVDoub;
-	if(findColor(argc) == argv1 && findColor(argv)== argv1 && argc >=0 && argc<=63 && argv >=0 && argv <=63){
+	if(findColor(from_value) == player && findColor(to_value)== player && from_value >=0 && from_value<=63 && to_value >=0 && to_value <=63){
 		switch(diff){
 		case 16:
 			if(tcol == fcol){
-				spotV = (board >>(argc+8)) & 1;
+				spotV = (board >>(from_value+8)) & 1;
 				if(spotV ==1){
 					temp = board;
-					temp ^= toggle<<argc;
-					temp ^=  toggle<<(argc+8);
-					temp ^=  toggle<<argv;
+					temp ^= toggle<<from_value;
+					temp ^=  toggle<<(from_value+8);
+					temp ^=  toggle<<to_value;
 					return temp;
 					break;
 				}
 			}
 		case -16:
 			if(tcol == fcol){
-				spotV = (board >>(argc-8)) & 1;
+				spotV = (board >>(from_value-8)) & 1;
 				if(spotV ==1){
 					temp = board;
-					temp ^= toggle<<argc;
-					temp ^=  toggle<<(argc-8);
-					temp ^=  toggle<<argv;
+					temp ^= toggle<<from_value;
+					temp ^=  toggle<<(from_value-8);
+					temp ^=  toggle<<to_value;
 					return temp;
 					break;
 				}
 			}
 		case 2:
 			if(trow == frow){
-				spotV = (board >>(argc +1)) & 1;
+				spotV = (board >>(from_value +1)) & 1;
 				if(spotV ==1){
 					temp = board;
-					temp ^= toggle<<argc;
-					temp ^=  toggle<<(argc+1);
-					temp ^=  toggle<<argv;
+					temp ^= toggle<<from_value;
+					temp ^=  toggle<<(from_value+1);
+					temp ^=  toggle<<to_value;
 					return temp;
 					break;
 				}
 			}
 		case -2:
 			if(trow == frow){
-				spotV = (board >>(argc-1)) & 1;
+				spotV = (board >>(from_value-1)) & 1;
 				if(spotV ==1){
 					temp = board;
-					temp ^= toggle<<argc;
-					temp ^=  toggle<<(argc-1);
-					temp ^=  toggle<<argv;
+					temp ^= toggle<<from_value;
+					temp ^=  toggle<<(from_value-1);
+					temp ^=  toggle<<to_value;
 					return temp;
 					break;
 				}
 			}
 		case 4:
 			if(trow == frow){
-				spotV= (board >>(argc+1)) &1;
-				spaceVDoub =(board >>(argc+2))&1;
-				spotVDoub = (board >> (argc+3))&1;
+				spotV= (board >>(from_value+1)) &1;
+				spaceVDoub =(board >>(from_value+2))&1;
+				spotVDoub = (board >> (from_value+3))&1;
 				if(spotV==1 && spaceVDoub==0 && spotVDoub ==1){
 					temp=board;
-					temp ^= toggle<<argc;
-					temp ^= toggle<<(argc+1);
-					temp ^= toggle<<(argc+3);
-					temp ^= toggle <<argv;
+					temp ^= toggle<<from_value;
+					temp ^= toggle<<(from_value+1);
+					temp ^= toggle<<(from_value+3);
+					temp ^= toggle <<to_value;
 					return temp;
 					break;
 				}
 			}
 		case -4:
 			if(trow == frow){
-				spotV= (board >>(argc-1)) &1;
-				spaceVDoub =(board >>(argc-2))&1;
-				spotVDoub = (board >> (argc-3))&1;
+				spotV= (board >>(from_value-1)) &1;
+				spaceVDoub =(board >>(from_value-2))&1;
+				spotVDoub = (board >> (from_value-3))&1;
 				if(spotV==1 && spaceVDoub==0 && spotVDoub ==1){
 					temp=board;
-					temp ^= toggle<<argc;
-					temp ^= toggle<<(argc-1);
-					temp ^= toggle<<(argc-3);
-					temp ^= toggle <<argv;
+					temp ^= toggle<<from_value;
+					temp ^= toggle<<(from_value-1);
+					temp ^= toggle<<(from_value-3);
+					temp ^= toggle <<to_value;
 					return temp;
 					break;
 				}
 			}
 		case 32:
 			if(tcol == fcol){
-				spotV= (board >>(argc+8)) &1;
-				spaceVDoub =(board >>(argc+16))&1;
-				spotVDoub = (board >> (argc+24))&1;
+				spotV= (board >>(from_value+8)) &1;
+				spaceVDoub =(board >>(from_value+16))&1;
+				spotVDoub = (board >> (from_value+24))&1;
 				if(spotV==1 && spaceVDoub==0 && spotVDoub ==1){
 					temp=board;
-					temp ^= toggle<<argc;
-					temp ^= toggle<<(argc+8);
-					temp ^= toggle<<(argc+24);
-					temp ^= toggle <<argv;
+					temp ^= toggle<<from_value;
+					temp ^= toggle<<(from_value+8);
+					temp ^= toggle<<(from_value+24);
+					temp ^= toggle <<to_value;
 					return temp;
 					break;
 				}
 			}
 		case -32:
 			if(tcol == fcol){
-				spotV= (board >>(argc-8)) &1;
-				spaceVDoub =(board >>(argc-16))&1;
-				spotVDoub = (board >> (argc-24))&1;
+				spotV= (board >>(from_value-8)) &1;
+				spaceVDoub =(board >>(from_value-16))&1;
+				spotVDoub = (board >> (from_value-24))&1;
 				if(spotV==1 && spaceVDoub==0 && spotVDoub ==1){
 					temp=board;
-					temp ^= toggle<<argc;
-					temp ^= toggle<<(argc-8);
-					temp ^= toggle<<(argc-24);
-					temp ^= toggle <<argv;
+					temp ^= toggle<<from_value;
+					temp ^= toggle<<(from_value-8);
+					temp ^= toggle<<(from_value-24);
+					temp ^= toggle <<to_value;
 					return temp;
 					break;
 				}
@@ -228,23 +226,23 @@ uint64_t makeMove(uint64_t board, int argc, int argv, char argv1){
 	}
 	return temp;
 }
-uint64_t makeInitialMove(uint64_t board, int argc, char argv){
+uint64_t makeInitialMove(uint64_t board, int space_value, char player){
 	uint64_t temp =0;
 	uint64_t toggle =1;
-	if(argv == findColor(argc)){
+	if(player == findColor(space_value)){
 		temp =board;
-		temp ^= toggle<<argc;
+		temp ^= toggle<<space_value;
 		return temp;
 	}
 	return temp;
 }
-void getMoves(int argc, uint64_t board, uint64_t *moves){
+void getMoves(int player, uint64_t board, uint64_t *moves){
 	int bSpaces[32]= {0, 2, 4, 6, 9, 11, 13, 15, 16, 18, 20, 22, 25, 27, 29, 31, 32, 34, 36, 38, 41, 43, 45, 47, 48, 50, 52, 54, 57, 59, 61, 63};
 	int wSpaces[32] = {1, 3, 5, 7, 8, 10, 12, 14, 17, 19, 21, 23, 24, 26, 28, 30, 33, 35, 37, 39, 40, 42, 44, 46, 49, 51, 53, 55, 56, 58, 60, 62};
 	int type;
 	uint64_t spotV = 0;
 	moves[0]=0;
-	if (argc == 1){
+	if (player == 1){
 		for(int i = 0; i<32; i = i +1){
 			spotV = (board>>bSpaces[i]) &1;
 			if (spotV ==1){
@@ -254,7 +252,7 @@ void getMoves(int argc, uint64_t board, uint64_t *moves){
 	       
 	}
 
-	if (argc == 0){
+	if (player == 0){
 		for(int i = 0; i<32; i=i+1){
 	       	spotV = (board>>wSpaces[i]) &1;
 			if (spotV ==1){
@@ -715,9 +713,9 @@ uint64_t findDoubleDown(int spot, uint64_t board){
 
 
 
-int getType(int argc){
-	int row = argc /8;
-	int col = argc % 8;
+int getType(int space_value){
+	int row = space_value /8;
+	int col = space_value % 8;
 	int type = 0;
 	if (row <=7 && row >=6 && col <=7 && col >=6)
 		type = 1;

@@ -72,11 +72,21 @@ int main(int argc, char **argv){
 	printBoard(board);
 #endif
 
+
+#ifdef DEBUG_GETMOVES
 	uint64_t moves[10] = {0};
 	getMoves(argv[2][0] == 'B', board, moves);
-	for (int i = 1; i < 10; i++)
+	int indices[2];
+	for (int i = 1; i < 10; ++i) {
 		printBoard(moves[i]);
+		get_move_indices(board, moves[i], indices);
+		printf("%c%d-%c%d\n", POS_LETTER(indices[0]), POS_NUM(indices[0]),
+				POS_LETTER(indices[1]), POS_NUM(indices[1]));
+	}
+
 	return 0;
+#endif
+
 	// printf("Black %d\nWhite %d\n", b_pieces, w_pieces);
 
 	int black = (argv[2][0] == 'B' ? 1 : 0);

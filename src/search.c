@@ -110,7 +110,7 @@ int max_value(struct minimax *state, int alpha, int beta, time_t start,
 		//printBoard(moves[i]);
 
 		/* if max's value is greater than beta, prune the tree */
-		if (v >= beta && 0) {
+		if (v >= beta) {
 			if (depth != 1)
 				free(state->children);
 
@@ -190,7 +190,7 @@ int min_value(struct minimax *state, int alpha, int beta, time_t start,
 		v = min(v, state->children[i].value);
 
 		/* if min's value is less than alpha, prune the tree */
-		if (v <= alpha && 0) {
+		if (v <= alpha) {
 			//printf("Pruning the tree at depth %d\n", depth);
 
 #ifdef DEBUG 

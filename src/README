@@ -26,4 +26,9 @@ COMPILATION
 	    PRETTY 	   - recompile with this if you do not have a driver to port
 	    		     moves to and from the agent and want to play the agent
 			     yourself... Good luck :)
-            
+
+
+	If you want to change the time the Agent takes to "think" between it's moves,
+	which in turn will increase the depth to which the search can go,there is a
+	#define called THINKING_TIME that accepts an integer value that represents the
+	time, in seconds, the agent is allowed to take between each move.

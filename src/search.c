@@ -6,7 +6,7 @@
 #include "board.h"
 #include "heuristic.h"
 
-#define THINKING_TIME  5
+#define THINKING_TIME  3
 #define INIT_ALPHA    (-65)
 #define INIT_BETA      65
 #define DONE printf("done\n")
@@ -14,20 +14,27 @@
 uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t), int me)
 {
 	struct minimax *state;
+	struct minimax copy;
 	state = calloc(1, sizeof(struct minimax));
 	state->board = board;
 	state->value = INIT_ALPHA;
 	
-	time_t start_thinking = time(NULL);
+	time_t start, end, start_thinking;
+	start = end = start_thinking = time(NULL);
 	int value;
-
+	int i;
+	uint64_t next_state;
+	
 	/* Time Limited Iterative Deepening Alpha-Beta Search */
-	for (int depth = 1; time(NULL) < (start_thinking + THINKING_TIME); depth++) {	       
-		if (state->children)
+	for (int depth = 1; time(NULL) < (start_thinking + THINKING_TIME); depth++) {
+		
+		if (state->children) {
+			for (i = 0; state->children[i].value != value; i++);
+			next_state = state->children[i].board;
 			free(state->children);
-		time_t start = time(NULL);
-		value = max_value(state, INIT_ALPHA, INIT_BETA, 1, depth, eval, me);
-		time_t end = time(NULL);
+		}
+
+		value = max_value(state, INIT_ALPHA, INIT_BETA, start, 1, depth, eval, me);
 	}
 
 #ifdef DEBUG
@@ -38,19 +45,20 @@ uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t), int me)
 	   find the node with the value that was returned by the 
 	   recursive search
 	 */
-	int i;
-	for (i = 0; state->children[i].value != value; i++);
 
-	uint64_t ret_value = state->children[i].board;
 	free(state->children);
 	free(state);
-	return ret_value;
+	return next_state;
 }
 
-int max_value(struct minimax *state, int alpha, int beta,
+int max_value(struct minimax *state, int alpha, int beta, time_t start,
 	      int depth, int max_depth, int(*eval)(uint64_t), int me)
 {
 	int v = INIT_ALPHA;
+
+	if (time(NULL) >= (start + THINKING_TIME))
+		return 100;
+	
 	if (depth >= max_depth) {
 		v = eval(state->board);
 		
@@ -76,7 +84,7 @@ int max_value(struct minimax *state, int alpha, int beta,
 		state->children[i-1].board = moves[i];
 
 		v = max(v, min_value(&(state->children[i-1]),
-				     alpha, beta, depth+1, max_depth, eval, me^1));
+				     alpha, beta, start, depth+1, max_depth, eval, me^1));
 
 		
 		state->children[i-1].value = v;
@@ -110,10 +118,13 @@ int max_value(struct minimax *state, int alpha, int beta,
 	return v;
 }
 
-int min_value(struct minimax *state, int alpha, int beta,
+int min_value(struct minimax *state, int alpha, int beta, time_t start,
 	      int depth, int max_depth, int(*eval)(uint64_t), int me)
 {
 	int v = INIT_BETA;
+
+	if (time(NULL) >= (start + THINKING_TIME))
+		return 100;
 	
 	if (depth >= max_depth) {
 		v = eval(state->board);
@@ -138,7 +149,7 @@ int min_value(struct minimax *state, int alpha, int beta,
 		state->children[i-1].board = moves[i];
 		
 		v = min(v, max_value(&(state->children[i-1]),
-				     alpha, beta, depth+1, max_depth, eval, me^1));
+				     alpha, beta, start, depth+1, max_depth, eval, me^1));
 
 		state->children[i-1].value = v;
 		

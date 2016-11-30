@@ -6,7 +6,7 @@
 #include "board.h"
 #include "heuristic.h"
 
-#define THINKING_TIME  1
+#define THINKING_TIME  10
 #define INIT_ALPHA    (-1000000)
 #define INIT_BETA       1000000
 #define DONE printf("done\n")
@@ -110,7 +110,7 @@ int max_value(struct minimax *state, int alpha, int beta, time_t start,
 		//printBoard(moves[i]);
 
 		/* if max's value is greater than beta, prune the tree */
-		if (v >= beta && 0) {
+		if (v >= beta) {
 			if (depth != 1)
 				free(state->children);
 
@@ -122,7 +122,7 @@ int max_value(struct minimax *state, int alpha, int beta, time_t start,
 			state->value = v;
 			return v;
 		}
-		alpha = max(beta, v);
+		alpha = max(alpha, v);
 	}
 	/* 
 	   Do not free the moves on the frontier so that a value can be 
@@ -190,7 +190,7 @@ int min_value(struct minimax *state, int alpha, int beta, time_t start,
 		v = min(v, state->children[i].value);
 
 		/* if min's value is less than alpha, prune the tree */
-		if (v <= alpha && 0) {
+		if (v <= alpha) {
 			//printf("Pruning the tree at depth %d\n", depth);
 
 #ifdef DEBUG 

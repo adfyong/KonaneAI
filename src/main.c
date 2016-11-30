@@ -69,6 +69,7 @@ int main(int argc, char **argv){
 		printf("Size: %d\n", size);
 		exit(1);
 	}
+	fclose(boardf);
 
 #ifdef PRETTY
 	printBoard(board);

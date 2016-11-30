@@ -51,7 +51,8 @@ uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t, char), int me)
 	}
 #endif
 
-	free(state->children);
+	if (state->children)
+		free(state->children);
 	free(state);
 	return next_state;
 }

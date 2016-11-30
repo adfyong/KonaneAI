@@ -6,7 +6,7 @@
 #include "board.h"
 #include "heuristic.h"
 
-#define THINKING_TIME  1
+#define THINKING_TIME  10
 #define INIT_ALPHA    (-1000000)
 #define INIT_BETA       1000000
 #define DONE printf("done\n")
@@ -122,7 +122,7 @@ int max_value(struct minimax *state, int alpha, int beta, time_t start,
 			state->value = v;
 			return v;
 		}
-		alpha = max(beta, v);
+		alpha = max(alpha, v);
 	}
 	/* 
 	   Do not free the moves on the frontier so that a value can be 

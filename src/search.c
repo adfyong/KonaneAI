@@ -14,7 +14,6 @@
 uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t, char), int me)
 {
 	struct minimax *state;
-	struct minimax copy;
 	state = calloc(1, sizeof(struct minimax));
 	state->board = board;
 	state->value = INIT_ALPHA;
@@ -37,13 +36,20 @@ uint64_t alpha_beta_search(uint64_t board, int(*eval)(uint64_t, char), int me)
 	}
 
 #ifdef DEBUG
-	printf("The final value was %d\n", value);
+	printf("The final value was %d\n", next_state);
 #endif
 
 	/*
 	   find the node with the value that was returned by the 
 	   recursive search
 	 */
+
+#ifdef PRINT_STATES
+	for (int i = 0; i < state->child_count; ++i) {
+		printBoard(state->children[0].board);
+		printf("%d\n", state->children[0].value);
+	}
+#endif
 
 	free(state->children);
 	free(state);
@@ -96,7 +102,7 @@ int max_value(struct minimax *state, int alpha, int beta, time_t start,
 		state->children[i-1].board = moves[i];
 
 		state->children[i-1].value = min_value(&(state->children[i-1]), 
-				alpha, beta, depth+1, max_depth, eval, me^1);
+				alpha, beta, start, depth+1, max_depth, eval, me^1);
 
 		v = max(v, state->children[i-1].value);
 
@@ -179,7 +185,7 @@ int min_value(struct minimax *state, int alpha, int beta, time_t start,
 		state->children[i].board = moves[i+1];
 
 		state->children[i].value = max_value(&(state->children[i]),
-					alpha, beta, depth+1, max_depth, eval, me^1);
+					alpha, beta, start, depth+1, max_depth, eval, me^1);
 
 		v = min(v, state->children[i].value);
 

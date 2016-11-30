@@ -1,4 +1,4 @@
-CFLAGS= -std=c99 -Wall -pedantic -g -DPRETTY
+CFLAGS= -std=c99 -Wall -pedantic -g
 CC=gcc
 
 .PHONY: clean

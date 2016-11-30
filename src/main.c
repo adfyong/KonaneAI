@@ -18,6 +18,8 @@ int main(int argc, char **argv){
 		exit(1);
 	}
 
+	initialize_player(argv[2][0] == 'B');
+
 	int b_pieces = 0;
 	int w_pieces = 0;
 	int size = 63;
@@ -73,12 +75,18 @@ int main(int argc, char **argv){
 #endif
 
 
+#ifdef DEBUG_HEUR_2
+	printf("%d\n", count_movable(board, argv[2][0] == 'B'));
+	return 0;
+#endif
+
 #ifdef DEBUG_GETMOVES
 	uint64_t moves[10] = {0};
 	getMoves(argv[2][0] == 'B', board, moves);
 	int indices[2];
-	for (int i = 1; i < 10; ++i) {
+	for (int i = 1; *(moves + i); ++i) {
 		printBoard(moves[i]);
+		printf("%d\n", count_movable(moves[i], argv[2][0] == 'B'));
 		get_move_indices(board, moves[i], indices);
 		printf("%c%d-%c%d\n", POS_LETTER(indices[0]), POS_NUM(indices[0]),
 				POS_LETTER(indices[1]), POS_NUM(indices[1]));

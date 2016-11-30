@@ -1,0 +1,34 @@
+NAME
+	Agent - an intelligent agent that plays the game of Konane
+
+SYNOPSIS
+	Agent [FILE] [W or B]
+
+DESCRIPTION
+	The Agent executable is an intelligent agent used to play the game of Konane.
+	It takes a file that contains the initial board state and either a 'W' or a 'B'
+	to indicate whether it is playing as White or Black, respectively.  The game
+	is meant to be played with a driver by default but if the user compiles with
+	the -DPRETTY flag then the game will output the board state and will prompt the
+	user for a move.
+
+COMPILATION
+	To compile just enter enter make inside the directory of the source files.
+	The compile flags that are supported are as follows:
+
+	    DEBUG_GAMEOVER - information about when a gameover state has been reached
+	    DEBUG_HEUR	   - used to debug the heuristic, will output moveable white pieces
+	    		     vs. moveable black
+            DEBUG_HEUR_2   - more details about the heuristic
+	    SKIP_AB 	   - skip the alpha-beta search algorithm, only useful if you add
+	    		     your own debug code before or after
+            DEBUG	   - prints detailed information at each node in the search
+	    PRETTY 	   - recompile with this if you do not have a driver to port
+	    		     moves to and from the agent and want to play the agent
+			     yourself... Good luck :)
+
+
+	If you want to change the time the Agent takes to "think" between it's moves,
+	which in turn will increase the depth to which the search can go,there is a
+	#define called THINKING_TIME that accepts an integer value that represents the
+	time, in seconds, the agent is allowed to take between each move.
